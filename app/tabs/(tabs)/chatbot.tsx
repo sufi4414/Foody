@@ -2,8 +2,8 @@ import { Text } from "@/components/Themed";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 
-export default function Home() {
+export default function Chatbot() {
   return (
-    <Heading>Home Page</Heading>
+    <Heading>ChatBot</Heading>
   );
 }

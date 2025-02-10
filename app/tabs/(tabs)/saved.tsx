@@ -2,8 +2,8 @@ import { Text } from "@/components/Themed";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 
-export default function Home() {
+export default function SavedList() {
   return (
-    <Heading>Home Page</Heading>
+    <Heading>Saved List</Heading>
   );
 }

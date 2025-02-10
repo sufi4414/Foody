@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { useColorScheme } from "@/components/useColorScheme";
 import { Slot } from "expo-router";
+import { useRouter } from 'expo-router';
 
 import "../global.css";
 
@@ -27,6 +28,7 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const router = useRouter();
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -43,7 +45,10 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
-
+  useEffect(() => {
+    // This can be any condition to redirect, for example, after a certain check
+    router.push('/tabs');  // Redirect to the tabs screen
+  }, []);
   // useLayoutEffect(() => {
   //   setStyleLoaded(true);
   // }, [styleLoaded]);
@@ -61,7 +66,7 @@ function RootLayoutNav() {
   return (
     <GluestackUIProvider mode={colorScheme === "dark" ? "dark" : "light"}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Slot />
+        <Slot/>
       </ThemeProvider>
     </GluestackUIProvider>
   );

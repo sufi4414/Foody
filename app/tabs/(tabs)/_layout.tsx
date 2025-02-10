@@ -22,23 +22,30 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Expo V3",
+          title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
 
       <Tabs.Screen
-        name="tab1"
+        name="chatbot"
         options={{
-          title: "Tab 1",
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          title: "ChatBot",
+          tabBarIcon: ({ color }) => <TabBarIcon name="comment-o" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="tab2"
+        name="saved"
         options={{
-          title: "Tab 2",
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          title: "Saved",
+          tabBarIcon: ({ color }) => <TabBarIcon name="bookmark-o" color={color} />,
+        }}
+      />
+       <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color }) => <TabBarIcon name="user-o" color={color} />,
         }}
       />
     </Tabs>
