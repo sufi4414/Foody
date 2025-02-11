@@ -11,7 +11,7 @@ import { VStack } from "@/components/ui/vstack"
 import { Center } from "@/components/ui/center"
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button"
 import { ShareIcon, EditIcon } from "@/components/ui/icon"
-
+import { FeedCard } from "@/components/ui/feedcard"
 
 export default function Profile() {
   return (
@@ -71,6 +71,12 @@ export default function Profile() {
       </Button>
     </HStack>
 
+    <FeedCard
+      name="Marc"
+      image="https://gluestack.github.io/public-blog-video-assets/dear.png"
+      avatar="https://gluestack.github.io/public-blog-video-assets/dear.png"
+      numberlikes={100}
+    />
 
     </Center>
     
