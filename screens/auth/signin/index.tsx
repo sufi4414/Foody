@@ -41,16 +41,16 @@ import { AuthLayout } from "../layout";
 
 const USERS = [
   {
-    email: "gabrial@gmail.com",
-    password: "Gabrial@123",
+    email: "sufi@gmail.com",
+    password: "Sufi@123",
   },
   {
-    email: "tom@gmail.com",
-    password: "Tom@123",
+    email: "marc@gmail.com",
+    password: "Marc@123",
   },
   {
-    email: "thomas@gmail.com",
-    password: "Thomas@1234",
+    email: "gabriel@gmail.com",
+    password: "Gabriel@1234",
   },
 ];
 
@@ -78,6 +78,7 @@ const LoginWithLeftBackground = () => {
   });
 
   const onSubmit = (data: LoginSchemaType) => {
+    // const router = useRouter();
     const user = USERS.find((element) => element.email === data.email);
     if (user) {
       if (user.password !== data.password)
@@ -87,14 +88,18 @@ const LoginWithLeftBackground = () => {
         toast.show({
           placement: "bottom right",
           render: ({ id }) => {
+            console.log("Success");
             return (
+              
               <Toast nativeID={id} variant="accent" action="success">
                 <ToastTitle>Logged in successfully!</ToastTitle>
               </Toast>
             );
           },
         });
+        router.push("/tabs");
         reset();
+        
       }
     } else {
       setValidated({ emailValid: false, passwordValid: true });
