@@ -47,7 +47,7 @@ export default function RootLayout() {
   }, [loaded]);
   useEffect(() => {
     // This can be any condition to redirect, for example, after a certain check
-    router.push('/tabs');  // Redirect to the tabs screen
+    router.push('/auth/signin');  // Redirect to the tabs screen
   }, []);
   // useLayoutEffect(() => {
   //   setStyleLoaded(true);
