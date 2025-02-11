@@ -1,0 +1,33 @@
+[
+    {
+      "id": 1,
+      "name": "Burnt Ends",
+      "address": "7 Dempsey Road, #01-04, Singapore 249671",
+      "rating": 4.8
+    },
+    {
+      "id": 2,
+      "name": "Candlenut",
+      "address": "Block 17A Dempsey Road, Singapore 249676",
+      "rating": 4.5
+    },
+    {
+      "id": 3,
+      "name": "Jaan by Kirk Westaway",
+      "address": "Swissôtel The Stamford, 2 Stamford Road, Level 70, Singapore 178882",
+      "rating": 4.7
+    },
+    {
+      "id": 4,
+      "name": "Hawker Chan",
+      "address": "78 Smith Street, Singapore 058972",
+      "rating": 4.2
+    },
+    {
+      "id": 5,
+      "name": "Odette",
+      "address": "1 St. Andrew’s Road, #01-04, National Gallery Singapore, Singapore 178957",
+      "rating": 4.9
+    }
+  ]
+  
