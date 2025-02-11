@@ -9,7 +9,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { useColorScheme } from "@/components/useColorScheme";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { useRouter } from 'expo-router';
 
 import "../global.css";
@@ -47,7 +47,7 @@ export default function RootLayout() {
   }, [loaded]);
   useEffect(() => {
     // This can be any condition to redirect, for example, after a certain check
-    router.push('/auth/signin');  // Redirect to the tabs screen
+    router.push('/auth/signin');  // Redirect 
   }, []);
   // useLayoutEffect(() => {
   //   setStyleLoaded(true);

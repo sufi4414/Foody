@@ -245,8 +245,9 @@ const CreatePasswordWithLeftBackground = () => {
 
 export const CreatePassword = () => {
   return (
-    <AuthLayout>
-      <CreatePasswordWithLeftBackground />
-    </AuthLayout>
+    <CreatePasswordWithLeftBackground />
+    // <AuthLayout>
+    //   <CreatePasswordWithLeftBackground />
+    // </AuthLayout>
   );
 };

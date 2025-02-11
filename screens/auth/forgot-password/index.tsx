@@ -131,8 +131,9 @@ const ForgotPasswordScreen = () => {
 
 export const ForgotPassword = () => {
   return (
-    <AuthLayout>
-      <ForgotPasswordScreen />
-    </AuthLayout>
+    <ForgotPasswordScreen />
+    // <AuthLayout>
+    //   <ForgotPasswordScreen />
+    // </AuthLayout>
   );
 };
