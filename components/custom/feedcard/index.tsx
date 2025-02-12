@@ -1,13 +1,17 @@
-import { Avatar, AvatarFallbackText, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallbackText,
+  AvatarImage,
+} from "@/components/ui/avatar";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
-import { ThreeDotsIcon, FavouriteIcon , ShareIcon } from "@/components/ui/icon";
+import { ThreeDotsIcon, FavouriteIcon, ShareIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-
+import { Bookmark } from '@/node_modules/lucide-react-native';
 
 interface FeedCardProps {
   name: string;
@@ -16,7 +20,12 @@ interface FeedCardProps {
   avatar?: string; // Optional avatar image
 }
 
-const FeedCard: React.FC<FeedCardProps> = ({ name, image, avatar, numberlikes }) => {
+const FeedCard: React.FC<FeedCardProps> = ({
+  name,
+  image,
+  avatar,
+  numberlikes,
+}) => {
   return (
     <Card className="p-3 rounded-lg w-full m-3" size="lg">
       {/* User Info */}
@@ -39,7 +48,7 @@ const FeedCard: React.FC<FeedCardProps> = ({ name, image, avatar, numberlikes })
       </Box>
 
       {/* Post Image */}
-      <Box className="mt-3 flex-col sm:mb-6 sm:flex-row">
+      <Box className="mt-3 flex items-center justify-center w-full">
         <Image
           source={{ uri: image }}
           className="rounded-md w-full h-auto aspect-square sm:w-72 sm:h-72"
@@ -50,22 +59,24 @@ const FeedCard: React.FC<FeedCardProps> = ({ name, image, avatar, numberlikes })
       {/* Like Button and save*/}
       <Box className="flex-row items-center justify-between w-full">
         {/* Left Side: Like Button and Count */}
-        <div className="flex items-center space-x-2">
-            <Button size="lg" className="rounded-full p-3.5" variant="link">
+        <Box className="flex-row items-center">
+          {" "}
+          <Button size="lg" className="rounded-full p-3.5" variant="link">
             <ButtonIcon as={FavouriteIcon} />
-            </Button>
-            <Text size="sm" className="text-gray-500"> {numberlikes}</Text>
-        </div>
+          </Button>
+          <Text size="sm" className="text-gray-500">
+            {" "}
+            {numberlikes}
+          </Text>{" "}
+        </Box>
 
         {/* Right Side: Share Button */}
         <Button size="lg" className="rounded-full p-3.5" variant="link">
-            <ButtonIcon as={ShareIcon} />
+          <ButtonIcon as={Bookmark} />
         </Button>
-        </Box>
-
-
+      </Box>
     </Card>
   );
 };
 
-export {FeedCard};
+export { FeedCard };
