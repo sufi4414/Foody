@@ -38,6 +38,7 @@ import { GoogleIcon } from "./assets/icons/google";
 import { Pressable } from "@/components/ui/pressable";
 import { useRouter } from 'expo-router';
 import { AuthLayout } from "../layout";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const signUpSchema = z.object({
   email: z.string().min(1, "Email is required").email(),
@@ -334,7 +335,10 @@ const SignUpWithLeftBackground = () => {
 
 export const SignUp = () => {
   return (
-    <SignUpWithLeftBackground />
+    <SafeAreaView>
+       <SignUpWithLeftBackground />
+    </SafeAreaView>
+   
     // <AuthLayout>
     //   <SignUpWithLeftBackground />
     // </AuthLayout>

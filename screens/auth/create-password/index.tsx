@@ -22,6 +22,7 @@ import { AlertTriangle } from "lucide-react-native";
 import { Pressable } from "@/components/ui/pressable";
 import { useRouter } from 'expo-router';
 import { AuthLayout } from "../layout";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const createPasswordSchema = z.object({
   password: z
@@ -245,7 +246,10 @@ const CreatePasswordWithLeftBackground = () => {
 
 export const CreatePassword = () => {
   return (
-    <CreatePasswordWithLeftBackground />
+    <SafeAreaView>
+      <CreatePasswordWithLeftBackground />
+    </SafeAreaView>
+    
     // <AuthLayout>
     //   <CreatePasswordWithLeftBackground />
     // </AuthLayout>

@@ -21,6 +21,7 @@ import { AlertTriangle } from "lucide-react-native";
 import { useRouter } from 'expo-router';
 import { Pressable } from "@/components/ui/pressable";
 import { AuthLayout } from "../layout";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const forgotPasswordSchema = z.object({
   email: z.string().min(1, "Email is required").email(),
@@ -131,7 +132,10 @@ const ForgotPasswordScreen = () => {
 
 export const ForgotPassword = () => {
   return (
-    <ForgotPasswordScreen />
+    <SafeAreaView>
+      <ForgotPasswordScreen />
+    </SafeAreaView>
+    
     // <AuthLayout>
     //   <ForgotPasswordScreen />
     // </AuthLayout>
