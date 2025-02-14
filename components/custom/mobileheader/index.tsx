@@ -3,6 +3,7 @@ import { HStack } from "@/components/ui/hstack";
 import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 
+
 interface MobileHeaderProps {
   title: string;
   leftIcon?: React.ElementType;
@@ -18,6 +19,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
   onLeftPress, 
   onRightPress 
 }) => {
+  console.log("RightIcon", RightIcon);
   return (
     <HStack
       className="py-3 px-3 border-b border-border-300 bg-background-0 items-center justify-between"
@@ -34,8 +36,9 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
           <Icons.Icon as={RightIcon} />
         </Pressable>
       ) : (
-        <div className="w-8" /> // Placeholder to maintain spacing if no right icon
+         <Text className="text-xl invisible">.</Text> //temp fix for alignment
       )}
+      
     </HStack>
   );
 };
