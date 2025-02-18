@@ -19,7 +19,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
   onLeftPress, 
   onRightPress 
 }) => {
-  console.log("RightIcon", RightIcon);
+  // console.log("RightIcon", RightIcon);
   return (
     <HStack
       className="py-3 px-3 border-b border-border-300 bg-background-0 items-center justify-between"

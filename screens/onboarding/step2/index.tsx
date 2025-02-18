@@ -118,12 +118,15 @@ const MainContent = () => {
 };
 
 export const Step2 = () => {
-  const router = useRouter();
+    const router = useRouter();
+    const backtoprofile = () => {
+      router.push("/tabs/profile");
+    };
   return (
     <SafeAreaView className="h-full w-full">
       <MobileHeader
         title="onboarding"
-        onLeftPress={() => console.log("Back Pressed")}
+        onLeftPress={backtoprofile}
       />
       <ScrollView className="flex-1">
         <MainContent />

@@ -36,9 +36,9 @@ const FeedCard: React.FC<FeedCardProps> = ({
             {avatar && <AvatarImage source={{ uri: avatar }} />}
           </Avatar>
           <VStack>
-            <Heading size="md" className="mb-1">
+            <Text size="md" className="mb-1">
               {name}
-            </Heading>
+            </Text>
           </VStack>
         </Box>
 
@@ -60,14 +60,14 @@ const FeedCard: React.FC<FeedCardProps> = ({
       <Box className="flex-row items-center justify-between w-full">
         {/* Left Side: Like Button and Count */}
         <Box className="flex-row items-center">
-          {" "}
+
           <Button size="lg" className="rounded-full p-3.5" variant="link">
             <ButtonIcon as={FavouriteIcon} />
           </Button>
           <Text size="sm" className="text-gray-500">
-            {" "}
+            
             {numberlikes}
-          </Text>{" "}
+          </Text>
         </Box>
 
         {/* Right Side: Share Button */}
