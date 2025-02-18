@@ -39,6 +39,7 @@ import { Pressable } from "@/components/ui/pressable";
 import { useRouter } from 'expo-router';
 import { AuthLayout } from "../layout";
 import { SafeAreaView } from "react-native-safe-area-context";
+import GradientButton from "@/components/custom/gradient-button/GradientButton";
 
 const signUpSchema = z.object({
   email: z.string().min(1, "Email is required").email(),
@@ -280,9 +281,10 @@ const SignUpWithLeftBackground = () => {
         </VStack>
 
         <VStack className="w-full my-7" space="lg">
-          <Button className="w-full" onPress={handleSubmit(onSubmit)}>
+          {/* <Button className="w-full" onPress={handleSubmit(onSubmit)}>
             <ButtonText className="font-medium">Sign up</ButtonText>
-          </Button>
+          </Button> */}
+          <GradientButton title="Sign up" onPress={handleSubmit(onSubmit)} />
           <Button
             variant="outline"
             action="secondary"
