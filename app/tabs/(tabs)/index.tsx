@@ -1,9 +1,3 @@
-import { Text } from "@/components/Themed";
-import { Button, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
+import {Home} from '@/screens/home-page';
 
-export default function Home() {
-  return (
-    <Heading>Home Page</Heading>
-  );
-}
+export default Home;
