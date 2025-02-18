@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
-import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { LinkText } from "@/components/ui/link";
 import { Link } from 'expo-router';
@@ -11,8 +10,6 @@ import {
   FormControlError,
   FormControlErrorIcon,
   FormControlErrorText,
-  FormControlLabel,
-  FormControlLabelText,
 } from "@/components/ui/form-control";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import {
@@ -22,11 +19,9 @@ import {
   CheckboxLabel,
 } from "@/components/ui/checkbox";
 import {
-  ArrowLeftIcon,
   CheckIcon,
   EyeIcon,
   EyeOffIcon,
-  Icon,
 } from "@/components/ui/icon";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { Keyboard } from "react-native";
@@ -35,10 +30,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertTriangle } from "lucide-react-native";
 import { GoogleIcon } from "./assets/icons/google";
-import { Pressable } from "@/components/ui/pressable";
 import { useRouter } from 'expo-router';
 import { AuthLayout } from "../layout";
-import { SafeAreaFrameContext, SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
+import GradientButton from "@/components/custom/gradient-button/GradientButton";
 
 const USERS = [
   {
@@ -119,35 +114,13 @@ const LoginWithLeftBackground = () => {
   };
   const router = useRouter();
   return (
-    <VStack className="max-w-[440px] w-full" space="md">
-      <VStack className="md:items-center" space="md">
-        <Pressable
-          onPress={() => {
-            router.back();
-          }}
-        >
-          <Icon
-            as={ArrowLeftIcon}
-            className="md:hidden text-background-800"
-            size="xl"
-          />
-        </Pressable>
-        <VStack>
-          <Heading className="md:text-center" size="3xl">
-            Log in
-          </Heading>
-          <Text>Login to Foody</Text>
-        </VStack>
-      </VStack>
+    <VStack className="max-w-[440px] w-full">
       <VStack className="w-full">
-        <VStack space="xl" className="w-full">
+        <VStack className="w-full" space="lg">
           <FormControl
             isInvalid={!!errors?.email || !validated.emailValid}
             className="w-full"
           >
-            <FormControlLabel>
-              <FormControlLabelText>Email</FormControlLabelText>
-            </FormControlLabel>
             <Controller
               defaultValue=""
               name="email"
@@ -165,7 +138,7 @@ const LoginWithLeftBackground = () => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input>
                   <InputField
-                    placeholder="Enter email"
+                    placeholder="Phone number, username, or email"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
@@ -188,9 +161,6 @@ const LoginWithLeftBackground = () => {
             isInvalid={!!errors.password || !validated.passwordValid}
             className="w-full"
           >
-            <FormControlLabel>
-              <FormControlLabelText>Password</FormControlLabelText>
-            </FormControlLabel>
             <Controller
               defaultValue=""
               name="password"
@@ -258,14 +228,24 @@ const LoginWithLeftBackground = () => {
           </HStack>
         </VStack>
         <VStack className="w-full my-7 " space="lg">
-          <Button className="w-full" onPress={handleSubmit(onSubmit)}>
+        {/* <LinearGradient
+              className="w-full rounded-full items-center py-2"
+              colors={["#DDD2F2", "#8752EB", "#8752EB", "#DDD2F2"]}
+              start={[0, 1]}
+              end={[1, 0]}
+            >
+          <Button className="w-full bg-transparent shadow-none" onPress={handleSubmit(onSubmit)}>
             <ButtonText className="font-medium">Log in</ButtonText>
           </Button>
+          </LinearGradient> */}
+          <GradientButton title="Log in" onPress={handleSubmit(onSubmit)} />
           <Button
             variant="outline"
             action="secondary"
             className="w-full gap-1"
-            onPress={() => {}}
+            onPress={() => {
+              console.log("Google Sign in");
+            }}
           >
             <ButtonText className="font-medium">
               Continue with Google
@@ -291,12 +271,8 @@ const LoginWithLeftBackground = () => {
 
 export const SignIn = () => {
   return (
-    <SafeAreaView>
+    <AuthLayout>
        <LoginWithLeftBackground />
-    </SafeAreaView>
-    
-    // <AuthLayout>
-    //   <LoginWithLeftBackground />
-    // </AuthLayout>
+    </AuthLayout>
   );
 };

@@ -123,30 +123,10 @@ const SignUpWithLeftBackground = () => {
   const router = useRouter();
   return (
     <VStack className="max-w-[440px] w-full" space="md">
-      <VStack className="md:items-center" space="md">
-        <Pressable
-          onPress={() => {
-            router.back();
-          }}
-        >
-          <Icon
-            as={ArrowLeftIcon}
-            className="md:hidden stroke-background-800"
-            size="xl"
-          />
-        </Pressable>
-        <VStack>
-          <Heading className="md:text-center" size="3xl">
-            Sign up
-          </Heading>
-          <Text>Sign up and start using Foody</Text>
-        </VStack>
-      </VStack>
       <VStack className="w-full">
         <VStack space="xl" className="w-full">
           <FormControl isInvalid={!!errors.email}>
             <FormControlLabel>
-              <FormControlLabelText>Email</FormControlLabelText>
             </FormControlLabel>
             <Controller
               name="email"
@@ -186,7 +166,6 @@ const SignUpWithLeftBackground = () => {
           </FormControl>
           <FormControl isInvalid={!!errors.password}>
             <FormControlLabel>
-              <FormControlLabelText>Password</FormControlLabelText>
             </FormControlLabel>
             <Controller
               defaultValue=""
@@ -231,7 +210,6 @@ const SignUpWithLeftBackground = () => {
           </FormControl>
           <FormControl isInvalid={!!errors.confirmpassword}>
             <FormControlLabel>
-              <FormControlLabelText>Confirm Password</FormControlLabelText>
             </FormControlLabel>
             <Controller
               defaultValue=""
@@ -335,12 +313,8 @@ const SignUpWithLeftBackground = () => {
 
 export const SignUp = () => {
   return (
-    <SafeAreaView>
-       <SignUpWithLeftBackground />
-    </SafeAreaView>
-   
-    // <AuthLayout>
-    //   <SignUpWithLeftBackground />
-    // </AuthLayout>
+    <AuthLayout>
+      <SignUpWithLeftBackground />
+    </AuthLayout>
   );
 };
