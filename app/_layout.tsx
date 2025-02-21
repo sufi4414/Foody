@@ -11,6 +11,9 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { useColorScheme } from "@/components/useColorScheme";
 import { Slot, Stack } from "expo-router";
 import { useRouter } from 'expo-router';
+import { supabase } from '@/lib/supabase'
+import SignIn from "./(auth)/signin";
+import { Session } from '@supabase/supabase-js'
 
 import "../global.css";
 
@@ -47,7 +50,7 @@ export default function RootLayout() {
   }, [loaded]);
   useEffect(() => {
     // This can be any condition to redirect, for example, after a certain check
-    router.push('/auth/signin');  // Redirect 
+    router.push('/signin');  // Redirect 
   }, []);
   // useLayoutEffect(() => {
   //   setStyleLoaded(true);
@@ -61,10 +64,10 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme();
 
   return (
-    <GluestackUIProvider mode = 'light'>
+    <GluestackUIProvider> 
         <Slot/>
     </GluestackUIProvider>
   );

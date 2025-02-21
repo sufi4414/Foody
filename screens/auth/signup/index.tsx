@@ -29,17 +29,16 @@ import {
   Icon,
 } from "@/components/ui/icon";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { Keyboard } from "react-native";
+import { Keyboard, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertTriangle } from "lucide-react-native";
 import { GoogleIcon } from "./assets/icons/google";
-import { Pressable } from "@/components/ui/pressable";
 import { useRouter } from 'expo-router';
 import { AuthLayout } from "../layout";
-import { SafeAreaView } from "react-native-safe-area-context";
 import GradientButton from "@/components/custom/gradient-button/GradientButton";
+import { supabase } from "@/lib/supabase"; // Import Supabase clien
 
 const signUpSchema = z.object({
   email: z.string().min(1, "Email is required").email(),
@@ -78,30 +77,48 @@ const SignUpWithLeftBackground = () => {
   });
   const toast = useToast();
 
-  const onSubmit = (data: SignUpSchemaType) => {
-    if (data.password === data.confirmpassword) {
+  const onSubmit = async (data: SignUpSchemaType) => {
+    console.log("Clicked");
+    console.log("email: ", data.email);
+    console.log("pass: ", data.password);
+    // const [loading, setLoading] = useState(false);
+    if (data.password !== data.confirmpassword) {
       toast.show({
         placement: "bottom right",
-        render: ({ id }) => {
-          return (
-            <Toast nativeID={id} variant="accent" action="success">
-              <ToastTitle>Success</ToastTitle>
-            </Toast>
-          );
-        },
+        render: ({ id }) => (
+          <Toast nativeID={id} variant="accent" action="error">
+            <ToastTitle>Passwords do not match</ToastTitle>
+          </Toast>
+        ),
       });
-      reset();
+      return;
+    }
+    console.log("Awaiting signup...");
+    const { data: {session}, error } = await supabase.auth.signUp({
+      email: data.email.trim(),
+      password: data.password.trim(),
+    });
+    console.log("session", session);
+    console.log("error", error);
+    if (error) {
+      toast.show({
+        placement: "bottom right",
+        render: ({ id }) => (
+          <Toast nativeID={id} variant="accent" action="error">
+            <ToastTitle>{error.message}</ToastTitle>
+          </Toast>
+        ),
+      });
     } else {
       toast.show({
         placement: "bottom right",
-        render: ({ id }) => {
-          return (
-            <Toast nativeID={id} variant="accent" action="error">
-              <ToastTitle>Passwords do not match</ToastTitle>
-            </Toast>
-          );
-        },
+        render: ({ id }) => (
+          <Toast nativeID={id} variant="accent" action="success">
+            <ToastTitle>Account Created! Check your email for verification.</ToastTitle>
+          </Toast>
+        ),
       });
+      router.push("/signin"); // ✅ Redirect user to Sign-In page
     }
   };
   const [showPassword, setShowPassword] = useState(false);
@@ -121,14 +138,13 @@ const SignUpWithLeftBackground = () => {
     Keyboard.dismiss();
     handleSubmit(onSubmit)();
   };
+  const secondInput = React.useRef<TextInput>(null);
+  const thirdInput = React.useRef<TextInput>(null);
   const router = useRouter();
   return (
-    <VStack className="max-w-[440px] w-full" space="md">
-      <VStack className="w-full">
-        <VStack space="xl" className="w-full">
+    <VStack className="max-w-[440px]" space="md">
+        <VStack space="md">
           <FormControl isInvalid={!!errors.email}>
-            <FormControlLabel>
-            </FormControlLabel>
             <Controller
               name="email"
               defaultValue=""
@@ -152,8 +168,8 @@ const SignUpWithLeftBackground = () => {
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    onSubmitEditing={handleKeyPress}
-                    returnKeyType="done"
+                    returnKeyType="next"
+                    onSubmitEditing={() => secondInput.current?.focus()}
                   />
                 </Input>
               )}
@@ -187,14 +203,18 @@ const SignUpWithLeftBackground = () => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input>
                   <InputField
+                    ref = {secondInput}
                     className="text-sm"
                     placeholder="Password"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    onSubmitEditing={handleKeyPress}
-                    returnKeyType="done"
+                    onSubmitEditing={() => thirdInput.current?.focus()}
+                    returnKeyType="next"
                     type={showPassword ? "text" : "password"}
+                    autoComplete="off"
+                    textContentType="oneTimeCode"
+                 
                   />
                   <InputSlot onPress={handleState} className="pr-3">
                     <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
@@ -231,6 +251,7 @@ const SignUpWithLeftBackground = () => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input>
                   <InputField
+                    ref={thirdInput}
                     placeholder="Confirm Password"
                     className="text-sm"
                     value={value}
@@ -239,6 +260,8 @@ const SignUpWithLeftBackground = () => {
                     onSubmitEditing={handleKeyPress}
                     returnKeyType="done"
                     type={showConfirmPassword ? "text" : "password"}
+                    autoComplete="off"
+                    textContentType="oneTimeCode"
                   />
 
                   <InputSlot onPress={handleConfirmPwState} className="pr-3">
@@ -279,11 +302,9 @@ const SignUpWithLeftBackground = () => {
             )}
           />
         </VStack>
+        {/* End of VStack 3 --> Form Controllers and accept policy */}
 
-        <VStack className="w-full my-7" space="lg">
-          {/* <Button className="w-full" onPress={handleSubmit(onSubmit)}>
-            <ButtonText className="font-medium">Sign up</ButtonText>
-          </Button> */}
+        <VStack space="md">
           <GradientButton title="Sign up" onPress={handleSubmit(onSubmit)} />
           <Button
             variant="outline"
@@ -297,19 +318,22 @@ const SignUpWithLeftBackground = () => {
             <ButtonIcon as={GoogleIcon} />
           </Button>
         </VStack>
+        {/* End of VStack  --> Buttons */}
         <HStack className="self-center" space="sm">
           <Text size="md">Already have an account?</Text>
-          <Link href="/auth/signin">
+          <Link href="/signin">
             <LinkText
               className="font-medium text-primary-700 group-hover/link:text-primary-600 group-hover/pressed:text-primary-700"
               size="md"
             >
-              Login
+              Log in
             </LinkText>
           </Link>
         </HStack>
-      </VStack>
+        {/* End of HStack  --> Text & Sign Up Link */}
+      {/* End of VStack 2  --> Main VStack */}
     </VStack>
+   
   );
 };
 
@@ -318,5 +342,7 @@ export const SignUp = () => {
     <AuthLayout>
       <SignUpWithLeftBackground />
     </AuthLayout>
-  );
+
+     );
+ 
 };

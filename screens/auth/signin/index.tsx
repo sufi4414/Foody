@@ -34,21 +34,24 @@ import { useRouter } from 'expo-router';
 import { AuthLayout } from "../layout";
 import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "@/components/custom/gradient-button/GradientButton";
+import { supabase } from "@/lib/supabase"; 
+import { SafeAreaView } from "react-native-safe-area-context";
+import FoodyIcon from "@/assets/Icons/Foody";
 
-const USERS = [
-  {
-    email: "sufi@gmail.com",
-    password: "Sufi@123",
-  },
-  {
-    email: "marc@gmail.com",
-    password: "Marc@123",
-  },
-  {
-    email: "gabriel@gmail.com",
-    password: "Gabriel@1234",
-  },
-];
+// const USERS = [
+//   {
+//     email: "sufi@gmail.com",
+//     password: "Sufi@123",
+//   },
+//   {
+//     email: "marc@gmail.com",
+//     password: "Marc@123",
+//   },
+//   {
+//     email: "gabriel@gmail.com",
+//     password: "Gabriel@1234",
+//   },
+// ];
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email(),
@@ -73,34 +76,45 @@ const LoginWithLeftBackground = () => {
     passwordValid: true,
   });
 
-  const onSubmit = (data: LoginSchemaType) => {
-    // const router = useRouter();
-    const user = USERS.find((element) => element.email === data.email);
-    if (user) {
-      if (user.password !== data.password)
-        setValidated({ emailValid: true, passwordValid: false });
-      else {
-        setValidated({ emailValid: true, passwordValid: true });
-        toast.show({
-          placement: "bottom right",
-          render: ({ id }) => {
-            console.log("Success");
-            return (
-              
-              <Toast nativeID={id} variant="accent" action="success">
-                <ToastTitle>Logged in successfully!</ToastTitle>
-              </Toast>
-            );
-          },
-        });
-        router.push("/tabs");
-        reset();
-        
-      }
-    } else {
-      setValidated({ emailValid: false, passwordValid: true });
-    }
-  };
+  const [loading, setLoading] = useState(false);
+
+const onSubmit = async (data: LoginSchemaType) => {
+  console.log("Loggin in..");
+  setLoading(true); 
+
+  const { data: {session}, error } = await supabase.auth.signInWithPassword({
+    email: data.email,
+    password: data.password,
+  });
+
+  setLoading(false);
+
+  if (error) {
+    setValidated({ emailValid: false, passwordValid: false });
+    toast.show({
+      placement: "bottom right",
+      render: ({ id }) => (
+        <Toast nativeID={id} variant="accent" action="error">
+          <ToastTitle>{error.message}</ToastTitle>
+        </Toast>
+      ),
+    });
+    return;
+  }
+  // ✅ Success: Redirect to home page
+  toast.show({
+    placement: "bottom right",
+    render: ({ id }) => (
+      <Toast nativeID={id} variant="accent" action="success">
+        <ToastTitle>Logged in successfully!</ToastTitle>
+      </Toast>
+    ),
+  });
+
+  router.push("/(tabs)"); // ✅ Navigate to the home screen after login
+  reset();
+};
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleState = () => {
@@ -112,14 +126,13 @@ const LoginWithLeftBackground = () => {
     Keyboard.dismiss();
     handleSubmit(onSubmit)();
   };
+  const secondInput = React.useRef<TextInput>(null);
   const router = useRouter();
   return (
-    <VStack className="max-w-[440px] w-full">
-      <VStack className="w-full">
-        <VStack className="w-full" space="lg">
+    <VStack className="max-w-[440px]" space ='md'>
+        <VStack space="md">
           <FormControl
             isInvalid={!!errors?.email || !validated.emailValid}
-            className="w-full"
           >
             <Controller
               defaultValue=""
@@ -138,12 +151,13 @@ const LoginWithLeftBackground = () => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input>
                   <InputField
-                    placeholder="Phone number, username, or email"
+                    placeholder="Email"
                     value={value}
                     onChangeText={onChange}
                     onBlur={onBlur}
-                    onSubmitEditing={handleKeyPress}
-                    returnKeyType="done"
+                    returnKeyType="next"
+                    onSubmitEditing={() => secondInput.current?.focus()}
+                    textContentType="oneTimeCode"
                   />
                 </Input>
               )}
@@ -156,10 +170,8 @@ const LoginWithLeftBackground = () => {
               </FormControlErrorText>
             </FormControlError>
           </FormControl>
-          {/* Label Message */}
           <FormControl
             isInvalid={!!errors.password || !validated.passwordValid}
-            className="w-full"
           >
             <Controller
               defaultValue=""
@@ -178,6 +190,7 @@ const LoginWithLeftBackground = () => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input>
                   <InputField
+                    ref={secondInput}
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
                     value={value}
@@ -185,6 +198,7 @@ const LoginWithLeftBackground = () => {
                     onBlur={onBlur}
                     onSubmitEditing={handleKeyPress}
                     returnKeyType="done"
+                    textContentType="oneTimeCode"
                   />
                   <InputSlot onPress={handleState} className="pr-3">
                     <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
@@ -200,7 +214,7 @@ const LoginWithLeftBackground = () => {
               </FormControlErrorText>
             </FormControlError>
           </FormControl>
-          <HStack className="w-full justify-between ">
+          <HStack className="justify-between ">
             <Controller
               name="rememberme"
               defaultValue={false}
@@ -220,24 +234,14 @@ const LoginWithLeftBackground = () => {
                 </Checkbox>
               )}
             />
-            <Link href="/auth/forgot-password">
+            <Link href="/forgot-password">
               <LinkText className="font-medium text-sm text-primary-700 group-hover/link:text-primary-600">
                 Forgot Password?
               </LinkText>
             </Link>
           </HStack>
         </VStack>
-        <VStack className="w-full my-7 " space="lg">
-        {/* <LinearGradient
-              className="w-full rounded-full items-center py-2"
-              colors={["#DDD2F2", "#8752EB", "#8752EB", "#DDD2F2"]}
-              start={[0, 1]}
-              end={[1, 0]}
-            >
-          <Button className="w-full bg-transparent shadow-none" onPress={handleSubmit(onSubmit)}>
-            <ButtonText className="font-medium">Log in</ButtonText>
-          </Button>
-          </LinearGradient> */}
+        <VStack space="md">
           <GradientButton title="Log in" onPress={handleSubmit(onSubmit)} />
           <Button
             variant="outline"
@@ -255,7 +259,7 @@ const LoginWithLeftBackground = () => {
         </VStack>
         <HStack className="self-center" space="sm">
           <Text size="md">Don't have an account?</Text>
-          <Link href="/auth/signup">
+          <Link href="/signup">
             <LinkText
               className="font-medium text-primary-700 group-hover/link:text-primary-600  group-hover/pressed:text-primary-700"
               size="md"
@@ -264,7 +268,6 @@ const LoginWithLeftBackground = () => {
             </LinkText>
           </Link>
         </HStack>
-      </VStack>
     </VStack>
   );
 };
@@ -274,5 +277,6 @@ export const SignIn = () => {
     <AuthLayout>
        <LoginWithLeftBackground />
     </AuthLayout>
+
   );
 };
