@@ -4,64 +4,158 @@ import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { Button, ButtonText } from "@/components/ui/button";
 import items from "@/data/items.json";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
+import { View } from "@/components/ui/view";  
+import { Pressable, StyleSheet } from "react-native";
+import {
+  Button,
+  ButtonText,
+  ButtonSpinner,
+  ButtonIcon,
+  ButtonGroup,
+} from "@/components/ui/button"
+import { ChevronDown, ListFilterPlus } from 'lucide-react-native';
+
 
 const SavedPageList = () => {
     const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => b.rating - a.rating));
     const [isSortedHighToLow, setIsSortedHighToLow] = useState(true);
+    const [isPressed, setIsPressed] = useState(false);
+    const [isLPressed, setIsLPressed] = useState(false);
   
     // Function to toggle sorting order
     const toggleSortOrder = () => {
       const newSortedItems = [...sortedItems].reverse(); // Reverse the order
       setSortedItems(newSortedItems);
       setIsSortedHighToLow(!isSortedHighToLow);
+      
+      if (isPressed) {
+        setIsPressed(false);
+      }else {
+        setIsPressed(true);
+      }
+      // console.log("isPressed", isPressed);
+    };
+    const toggleLocation = () => {
+      
+      if (isLPressed) {
+        setIsLPressed(false);
+      }else {
+        setIsLPressed(true);
+      }
+      // console.log("isPressed", isPressed);
     };
 
+
   return (
-    <Box className="py-10 px-4">
-      {/* Filter Button */}
-      <Button className ="w-24" variant="outline" action="primary" onPress={toggleSortOrder}>
-        <ButtonText>{isSortedHighToLow ? "Score" : "Score"}</ButtonText>
-      </Button>
+    <VStack className="justify-center items-center" space="xl" style={{flex: 1}}>
+      <HStack space="xl">
+        <Button  
+        style={styles.filterButton}
+        variant="outline"
+        disabled={true}
+        >
+          <ButtonIcon as={ListFilterPlus} />
+        </Button>
+        <Button 
+        variant="outline"
+        action="primary"
+        onPress={toggleSortOrder}
+        style={[styles.button, isPressed && styles.buttonPressed]}
+        > 
+          <View style={styles.buttonContent}>
+            <ButtonText>{isSortedHighToLow ? "Score" : "Score"}</ButtonText>
+            <ButtonIcon as={ChevronDown} className="ml-2" />
+          </View>
+        </Button>
+       
+        <Button 
+        variant="outline" 
+        action="primary"
+        onPress={toggleLocation}
+        style={[styles.locationButton, isLPressed && styles.buttonPressed]}
+        >
+          <View style={styles.buttonContent}>
+          <ButtonText>Location</ButtonText>
+          <ButtonIcon as={ChevronDown} className="ml-2"></ButtonIcon>
+          </View>
+        </Button>
+      </HStack>
 
-      {/* Heading */}
-      {/* <Heading className="text-xl pb-3">Saved Restaurants</Heading> */}
-
-      {/* Restaurant List */}
       <FlatList
+        style={{flex: 1}}
+        contentContainerStyle={styles.flatListContent}
+        className="w-full h-full"
         data={sortedItems}
         renderItem={({ item, index }) => (
-          <Box className="border-b border-gray-200 dark:border-gray-700 py-2 px-4">
-            <HStack className="justify-between items-center">
-              <HStack className="space-x-3">
-                {/* Numbering */}
-                <Text className="text-sm font-bold">{index + 1}.</Text>
-                <VStack>
-                  <Text className="text-sm font-semibold">{item.name}</Text>
-                  {/* <Text className="text-xs font-light text-gray-500 dark:text-gray-400" numberOfLines={1} ellipsizeMode="tail">
-                    {item.address}
-                  </Text> */}
+            <HStack className="items-center" space="md">
+              <Text className="text-base font-semibold tracking-wide">{index + 1}.</Text>
+                <VStack className="w-auto space-between">
+                  <Text className="text-base font-semibold tracking-wide">{item.name}</Text>
+                  <Text className="text-xs font-extralight tracking-wide">{item.address}</Text>
                 </VStack>
-              </HStack>
-              <Text className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                ⭐ {item.rating}
-              </Text>
             </HStack>
-          </Box>
+            
         )}
         keyExtractor={(item) => item.id.toString()}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
       />
-    </Box>
+    
+    </VStack>
   );
 };
 
 export const SavedPage = () => {
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
+    <SafeAreaView style={styles.container} className="flex-1 bg-white dark:bg-gray-900">
       <SavedPageList />
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+ button: {
+  minHeight: 32,
+  width: 113,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: '#CAC4D0',
+},
+buttonPressed: {
+  backgroundColor: 'rgba(135, 82, 235, 0.22)', 
+},
+buttonContent: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+},
+locationButton: {
+  minHeight: 32,
+  width: 174,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: '#CAC4D0',
+},
+filterButton: {
+  minHeight: 32,
+  width: 24,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: '#CAC4D0',
+},
+flatListContent: {
+  paddingHorizontal: 30, // Add padding to the left and right
+},
+});
