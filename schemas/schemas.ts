@@ -24,7 +24,6 @@ export const userProfileSchema = z.object({
   profilePicture: z.string().url("Invalid URL").optional(), // URL to the user's profile picture
   following: z.number().int().optional(), // Number of users the user is following
   followers: z.number().int().optional(), // Number of followers the user has
-  posts: z.number().int().optional(), // Number of posts the user has made
 });
 
 // Infer the TypeScript type from the schema
@@ -33,7 +32,7 @@ export type userSchemaDetails = z.infer<typeof userProfileSchema>;
 // Sample user data
 export const sampleUser: userSchemaDetails = {
   userId: "550e8400-e29b-41d4-a716-446655440000", // Example UUID
-  username: "Marcc",
+  username: "Marc",
   email: "john.doe@example.com",
   password: "Password123!", // Meets the schema requirements
   fullName: "Marc Gabriel ",
@@ -41,6 +40,5 @@ export const sampleUser: userSchemaDetails = {
   profilePicture: "https://gluestack.github.io/public-blog-video-assets/Avatar.png",
   following: 100,
   followers: 50,
-  posts: 200,
 
 };

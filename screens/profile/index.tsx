@@ -24,6 +24,9 @@ interface FeedData {
   image: string;
   avatar: string;
   numberlikes: number;
+  title: string;
+  isFavourite?: boolean;
+  isBookmarked?: boolean;
 }
 
 const FEED_DATA: FeedData[] = [
@@ -33,6 +36,8 @@ const FEED_DATA: FeedData[] = [
       "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     avatar: "https://gluestack.github.io/public-blog-video-assets/ship.png",
     numberlikes: 100,
+    title: "Delicious Food",
+    isFavourite: true,
   },
   {
     name: "John",
@@ -40,6 +45,9 @@ const FEED_DATA: FeedData[] = [
       "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     avatar: "https://gluestack.github.io/public-blog-video-assets/parrot.png",
     numberlikes: 3,
+    title: "good food and great company lorem ipsum dolor asjdhsajd hsdfhjsakdfh s gfsjfdgsafdg shjafdg asfkdh",
+    isFavourite: true,
+    isBookmarked: true,
   },
   {
     name: "John",
@@ -47,6 +55,7 @@ const FEED_DATA: FeedData[] = [
       "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     avatar: "https://gluestack.github.io/public-blog-video-assets/parrot.png",
     numberlikes: 3,
+    title: "Delicious Food",
   },
 ];
 
@@ -64,7 +73,7 @@ const MainContent = () => {
   };
 
   return (
-    <Center className=" md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4">
+    <Center className=" md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4 mt-4">
       <VStack space="lg" className="items-center">
         <Avatar size="2xl" className="bg-primary-600">
           <AvatarImage
@@ -86,7 +95,6 @@ const MainContent = () => {
           {[
             { value: sampleUser.following, label: "Following" },
             { value: sampleUser.followers, label: "Followers" },
-            { value: sampleUser.posts, label: "Posts" },
           ].map((data, i) => (
             <React.Fragment key={i}>
               <VStack className="py-3 px-4 items-center" space="xs">
@@ -97,7 +105,7 @@ const MainContent = () => {
                   {data.label}
                 </Text>
               </VStack>
-              {i < 2 && <Divider orientation="vertical" className="h-10" />}
+              {i < 1 && <Divider orientation="vertical" className="h-10" />}
             </React.Fragment>
           ))}
         </HStack>
@@ -137,10 +145,13 @@ const MainContent = () => {
       {FEED_DATA.map((feed, index) => (
         <FeedCard
           key={index}
+          isFavourite={feed.isFavourite}
+          isBookmarked={feed.isBookmarked}
           name={sampleUser.username}
           image={feed.image}
           avatar={sampleUser.profilePicture}
           numberlikes={feed.numberlikes}
+          title={feed.title}
         />
       ))}
     </Center>
