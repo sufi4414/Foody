@@ -96,7 +96,16 @@ const SavedPageList = () => {
                   <Text className="text-base font-semibold tracking-wide">{item.name}</Text>
                   <Text className="text-xs font-extralight tracking-wide" style={styles.address}>{item.address}</Text>
                 </VStack>
-                <Text className="text-base font-semibold tracking-wide" style={styles.rating}>{item.rating}</Text>
+                <Button 
+                style={styles.buttonRating} 
+                size="lg" 
+                className="rounded-full p-3.5"
+                variant="outline"
+                disabled={true} 
+                >
+                  <ButtonText style={styles.ratingText}>{item.rating}</ButtonText>
+                </Button>
+                {/* <Text className="text-base font-semibold tracking-wide" style={styles.rating}>{item.rating}</Text> */}
             </HStack>
             
         )}
@@ -166,8 +175,24 @@ item: {
   borderBottomWidth: 1,
   borderBottomColor: '#E2E8F0',
 },
-rating:{
-  marginLeft: 'auto'
+buttonRating:{
+  width: 25,
+  height: 25,
+  flexShrink: 0,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: '#13B018',
+  marginLeft: 'auto',
+  padding: 0,
+},
+ratingText: {
+  color: '#2B2B2B',
+  textAlign: 'center',
+  fontSize: 8, // Adjusted font size to fit within the button
+  fontStyle: 'normal',
+  fontWeight: '300',
+  letterSpacing: 0.25,
 },
 itemContent: {
   flexShrink: 1,
