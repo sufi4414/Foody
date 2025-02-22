@@ -67,7 +67,7 @@ function RootLayoutNav() {
   // const colorScheme = useColorScheme();
 
   return (
-    <GluestackUIProvider> 
+    <GluestackUIProvider>
         <Slot/>
     </GluestackUIProvider>
   );

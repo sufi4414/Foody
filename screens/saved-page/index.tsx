@@ -90,12 +90,13 @@ const SavedPageList = () => {
         className="w-full h-full"
         data={sortedItems}
         renderItem={({ item, index }) => (
-            <HStack className="items-center" space="md">
+            <HStack className="items-center" space="md" style={styles.item}> 
               <Text className="text-base font-semibold tracking-wide">{index + 1}.</Text>
-                <VStack className="w-auto space-between">
+                <VStack className="w-auto space-between" style={styles.itemContent}>
                   <Text className="text-base font-semibold tracking-wide">{item.name}</Text>
-                  <Text className="text-xs font-extralight tracking-wide">{item.address}</Text>
+                  <Text className="text-xs font-extralight tracking-wide" style={styles.address}>{item.address}</Text>
                 </VStack>
+                <Text className="text-base font-semibold tracking-wide" style={styles.rating}>{item.rating}</Text>
             </HStack>
             
         )}
@@ -157,5 +158,22 @@ filterButton: {
 },
 flatListContent: {
   paddingHorizontal: 30, // Add padding to the left and right
+  alignSelf: 'stretch',
+},
+item: {
+  flex:1,
+  paddingBottom:20, 
+  borderBottomWidth: 1,
+  borderBottomColor: '#E2E8F0',
+},
+rating:{
+  marginLeft: 'auto'
+},
+itemContent: {
+  flexShrink: 1,
+},
+address: {
+  flexGrow: 1,
+  flexShrink: 1,
 },
 });
