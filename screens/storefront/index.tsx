@@ -16,7 +16,7 @@ const StorefrontPage = ({id,name,address,rating}) => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'reviews':
-        return <Text>Reviews for {name}</Text>;
+        return <Text style={styles.activeTabText}>Reviews for {name}</Text>;
       case 'menu':
         return <Text>Menu for {name}</Text>;
       case 'reservation':
@@ -33,13 +33,6 @@ const StorefrontPage = ({id,name,address,rating}) => {
             <View style={styles.cardContainer}>
                 <RestaurantCard id={id} name={name} address={address} rating={rating}/>
             </View>
-            {/* <View style={styles.buttonContainer}>
-                <HStack style={styles.buttonHStack} space ='xl'>
-                    <Button variant='outline'><ButtonText>Reviews</ButtonText></Button>
-                    <Button variant='outline'><ButtonText>Menu</ButtonText></Button>
-                    <Button variant='outline'><ButtonText>Reservation</ButtonText></Button>
-                </HStack>
-            </View> */}
             {/* Tab Buttons */}
             <View style={styles.tabs} >
                 <TouchableOpacity
@@ -58,10 +51,8 @@ const StorefrontPage = ({id,name,address,rating}) => {
                 <Text style={[styles.tabText, activeTab === 'reservation' && styles.activeTabText]}>Reservation</Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.tabContent}>{renderTabContent()}</View>
 
-            {/* <View>
-                <Text>{}</Text>
-            </View> */}
 
         </View>
     </SafeAreaView>
@@ -80,16 +71,6 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         marginHorizontal: 'auto', 
-      },
-      buttonContainer: {
-        position: 'absolute',
-        top: '135%', // Adjust this value as needed to control the overlap
-        left: 0,
-        right: 0,
-        alignSelf:'center',
-      },
-      buttonHStack: {
-        justifyContent: 'center', // Center the buttons within the HStack
       },
       tabs: {
         position: 'absolute',
@@ -112,8 +93,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
       },
       tabContent: {
-        marginTop: 20,
-        alignItems: 'center',
+        position: 'absolute',
+        alignSelf:'center',
+        top: '150%', // Adjust this value as needed to control the overlap
+        color: 'black',
       },
       activeTabText: {
         color: 'black',  // Color when the tab is active
