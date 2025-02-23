@@ -8,7 +8,7 @@ import items from "@/data/items.json";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { View } from "@/components/ui/view";  
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import {
   Button,
   ButtonText,
@@ -17,6 +17,7 @@ import {
   ButtonGroup,
 } from "@/components/ui/button"
 import { ChevronDown, ListFilterPlus } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 
 
 const SavedPageList = () => {
@@ -48,8 +49,16 @@ const SavedPageList = () => {
       // console.log("isPressed", isPressed);
     };
 
+    
+    type RootStackParamList = {
+      storefront: { item: { id: number; name: string; address: string; rating: number; } };
+    };
+    
+    const router = useRouter();
+
 
   return (
+
     <VStack className="justify-center items-center" space="xl" style={{flex: 1}}>
       <HStack space="xl">
         <Button  
@@ -90,6 +99,17 @@ const SavedPageList = () => {
         className="w-full h-full"
         data={sortedItems}
         renderItem={({ item, index }) => (
+          <TouchableWithoutFeedback
+          onPress={() => router.push({ 
+            pathname: '/(storefront)/[id]', 
+            params: { 
+              id: item.id,
+              name: item.name,
+              address: item.address,
+              rating: item.rating
+            } })}
+          >
+          <View>
             <HStack className="items-center" space="md" style={styles.item}> 
               <Text className="text-base font-semibold tracking-wide">{index + 1}.</Text>
                 <VStack className="w-auto space-between" style={styles.itemContent}>
@@ -105,8 +125,10 @@ const SavedPageList = () => {
                 >
                   <ButtonText style={styles.ratingText}>{item.rating}</ButtonText>
                 </Button>
-                {/* <Text className="text-base font-semibold tracking-wide" style={styles.rating}>{item.rating}</Text> */}
             </HStack>
+          </View>
+          </TouchableWithoutFeedback>
+            
             
         )}
         keyExtractor={(item) => item.id.toString()}
