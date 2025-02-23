@@ -26,8 +26,10 @@ const RestaurantCard = ({id,name,address,rating}) => {
         <Divider style={styles.divider}/>
       </VStack>
       <VStack>
-      <HStack>
+      <HStack space="xl">
       <Text size="sm">Average Score</Text>
+      <RatingButton rating={rating}/>
+      <Text size="sm">Friends Score</Text>
       <RatingButton rating={rating}/>
       </HStack>
       </VStack>
@@ -38,8 +40,9 @@ const RestaurantCard = ({id,name,address,rating}) => {
 };
 const styles = StyleSheet.create({
     cardContainer: {
-        margin: 12,
-        alignItems: 'center',
+        marginHorizontal: 'auto',
+        shadowColor: 'rgba(135, 82, 235, 0.22)', // Shadow color
+        elevation: 5, // Required for Android shadow
       },
       card: {
         // padding: 16,
