@@ -42,3 +42,55 @@ export const sampleUser: userSchemaDetails = {
   followers: 50,
 
 };
+
+
+
+// Define the Zod schema for a single feed item
+export const FeedDataSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  image: z.string(), // If you want to enforce valid URLs, you can use z.string().url()
+  avatar: z.string(),
+  numberlikes: z.number(),
+  title: z.string(),
+  isFavourite: z.boolean().optional(),
+  isBookmarked: z.boolean().optional(),
+});
+
+// Create your feed data array
+export const FEED_DATA = [
+  {
+    id: "1",
+    name: "Marc",
+    image:
+      "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    avatar: "https://gluestack.github.io/public-blog-video-assets/ship.png",
+    numberlikes: 100,
+    title: "Hidden Gem what hidden Gem",
+    isFavourite: true,
+  },
+  {
+    id: "2",
+    name: "John",
+    image:
+      "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    avatar: "https://gluestack.github.io/public-blog-video-assets/parrot.png",
+    numberlikes: 3,
+    title:
+      "good food and great company",
+    isFavourite: true,
+    isBookmarked: true,
+  },
+  {
+    id: "3",
+    name: "John",
+    image:
+      "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    avatar: "https://gluestack.github.io/public-blog-video-assets/parrot.png",
+    numberlikes: 3,
+    title: "Delicious Food with friends",
+  },
+];
+
+// Validate the feed data array against the schema
+export const ValidatedFeedData = z.array(FeedDataSchema).parse(FEED_DATA);

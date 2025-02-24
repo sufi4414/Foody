@@ -22,17 +22,21 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 
 const MainContent = () => {
+  const router = useRouter();
   const [values, setValues] = useState([]);
 
   const handleLogSelection = () => {
     console.log("Selected Cuisines Preferences:", values);
+    router.push("/tabs/profile");
   };
 
   return (
     <VStack>
       <FormControl>
         <FormControlLabel>
-          <FormControlLabelText>What cuisines do you prefer?</FormControlLabelText>
+          <FormControlLabelText>
+            What cuisines do you prefer?
+          </FormControlLabelText>
         </FormControlLabel>
         <CheckboxGroup
           className="my-2"
@@ -105,9 +109,7 @@ const MainContent = () => {
           </VStack>
         </CheckboxGroup>
         <FormControlHelper>
-          <FormControlHelperText>
-            Select all that apply
-          </FormControlHelperText>
+          <FormControlHelperText>Select all that apply</FormControlHelperText>
         </FormControlHelper>
       </FormControl>
       <Button onPress={handleLogSelection}>
@@ -118,16 +120,13 @@ const MainContent = () => {
 };
 
 export const Step2 = () => {
-    const router = useRouter();
-    const backtoprofile = () => {
-      router.push("/tabs/profile");
-    };
+  const router = useRouter();
+  const backtoprofile = () => {
+    router.push("/tabs/profile");
+  };
   return (
     <SafeAreaView className="h-full w-full">
-      <MobileHeader
-        title="onboarding"
-        onLeftPress={backtoprofile}
-      />
+      <MobileHeader title="onboarding" onLeftPress={backtoprofile} />
       <ScrollView className="flex-1">
         <MainContent />
       </ScrollView>

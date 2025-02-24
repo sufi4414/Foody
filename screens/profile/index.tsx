@@ -17,48 +17,7 @@ import { Divider } from "@/components/ui/divider";
 import React from "react";
 import { MobileHeader } from "@/components/custom/mobileheader";
 import { useRouter } from "expo-router";
-import { sampleUser } from "@/schemas/schemas";
-
-interface FeedData {
-  name: string;
-  image: string;
-  avatar: string;
-  numberlikes: number;
-  title: string;
-  isFavourite?: boolean;
-  isBookmarked?: boolean;
-}
-
-const FEED_DATA: FeedData[] = [
-  {
-    name: "Marc",
-    image:
-      "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    avatar: "https://gluestack.github.io/public-blog-video-assets/ship.png",
-    numberlikes: 100,
-    title: "Delicious Food",
-    isFavourite: true,
-  },
-  {
-    name: "John",
-    image:
-      "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    avatar: "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-    numberlikes: 3,
-    title: "good food and great company lorem ipsum dolor asjdhsajd hsdfhjsakdfh s gfsjfdgsafdg shjafdg asfkdh",
-    isFavourite: true,
-    isBookmarked: true,
-  },
-  {
-    name: "John",
-    image:
-      "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    avatar: "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-    numberlikes: 3,
-    title: "Delicious Food",
-  },
-];
-
+import { sampleUser, FEED_DATA } from "@/schemas/schemas";
 
 
 const MainContent = () => {
@@ -130,21 +89,18 @@ const MainContent = () => {
             <ButtonText className="text-dark">Edit Dietary</ButtonText>
             <ButtonIcon as={NutOff} />
           </Button>
+
+
         </HStack>
 
-        {/* <HStack space="md">
-          <Button size="sm" variant="outline">
-            <ButtonText>Been to</ButtonText>
-          </Button>
-          <Button size="sm" variant="outline">
-            <ButtonText>Reviewed</ButtonText>
-          </Button>
-        </HStack> */}
+
       </VStack>
 
       {FEED_DATA.map((feed, index) => (
         <FeedCard
+
           key={index}
+          id={feed.id}
           isFavourite={feed.isFavourite}
           isBookmarked={feed.isBookmarked}
           name={sampleUser.username}

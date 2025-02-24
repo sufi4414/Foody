@@ -13,8 +13,11 @@ import { Text } from "@/components/ui/text";
 import React, { useState } from "react";
 import HeartButton from "../heartButton/HeartButton";
 import BookmarkButton from "../bookmarkButton/BookmarkButton";
+import { useRouter } from "expo-router";
+import { Pressable } from "@/components/ui/pressable";
 
 interface FeedCardProps {
+  id: string;
   name: string;
   numberlikes: number;
   image: string;
@@ -25,6 +28,7 @@ interface FeedCardProps {
 }
 
 const FeedCard: React.FC<FeedCardProps> = ({
+  id,
   name,
   image,
   avatar,
@@ -33,7 +37,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
   isFavourite = false, // Default false
   isBookmarked = false, // Default false
 }) => {
-  // State to manage favourite and bookmark toggles
+  const router = useRouter();
   const [isFav, setIsFav] = useState(isFavourite);
   const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
 
@@ -47,17 +51,24 @@ const FeedCard: React.FC<FeedCardProps> = ({
     console.log("Bookmark Pressed:", !isBookmarkedState);
   };
 
+  const goReview = () => {
+    router.push(`/review/${id}`);
+  };
+
   return (
-    <Card className="p-0 rounded-lg w-full m-1" size="lg">
+    <Card className="p-0 pt-1 w-full m-1 gap-2" size="lg">
       {/* User Info */}
-      <Box className="flex-row items-center justify-between p-2">
+      <Box className="flex-row items-center justify-between p-1">
         <Box className="flex-row items-center">
-          <Avatar className="mr-2" size="sm">
+          <Avatar className="mr-2" size="md">
             <AvatarFallbackText>{name?.charAt(0)}</AvatarFallbackText>
             {avatar && <AvatarImage source={{ uri: avatar }} />}
           </Avatar>
           <VStack>
-            <Text size="lg" bold={true}>
+          <Text size="md" bold={true}>
+              Little Italian Cafe
+            </Text>
+            <Text size="md" className="text-gray-500">
               {name}
             </Text>
           </VStack>
@@ -70,15 +81,22 @@ const FeedCard: React.FC<FeedCardProps> = ({
 
       {/* Post Image */}
       <Box className="flex items-center justify-center w-full">
-        <Image
-          source={{ uri: image }}
-          className="rounded-md w-full h-auto aspect-square sm:w-72 sm:h-72"
-          alt="image"
-        />
+        <Pressable onPress={goReview}>
+          <Image
+            source={{ uri: image }}
+            className=" w-screen h-auto aspect-square"
+            alt="image"
+          />
+        </Pressable>
       </Box>
 
+      {/* Captions */}
+      <Text size="md" className="ml-2 mr-2">
+        {title}
+      </Text>
+
       {/* Like and Save Buttons */}
-      <Box className="flex-row items-center justify-between w-full p-2">
+      <Box className="flex-row items-center justify-between w-full p-2 ">
         {/* Left Side: Like Button and Count */}
         <Box className="flex-row items-center">
           <HeartButton
@@ -100,11 +118,6 @@ const FeedCard: React.FC<FeedCardProps> = ({
           onPress={handleBookmarkPress}
         />
       </Box>
-
-      {/* Captions */}
-      <Text size="md" className="ml-2 mr-2 mb-2">
-        {title}
-      </Text>
     </Card>
   );
 };
