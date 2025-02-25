@@ -18,6 +18,7 @@ import React from "react";
 import { MobileHeader } from "@/components/custom/mobileheader";
 import { useRouter } from "expo-router";
 import { sampleUser, FEED_DATA } from "@/schemas/schemas";
+import { SwipeableImageCarousel } from "@/components/custom/swipeableimagecarousel";
 
 
 const MainContent = () => {
@@ -110,6 +111,8 @@ const MainContent = () => {
           title={feed.title}
         />
       ))}
+    <SwipeableImageCarousel/>
+
     </Center>
   );
 };

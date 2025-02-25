@@ -20,6 +20,7 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Divider } from "@/components/ui/divider";
 import { FEED_DATA } from "@/schemas/schemas";
+import { SwipeableImageCarousel } from "@/components/custom/swipeableimagecarousel";
 
 interface ReviewProps {
   reviewId: string;
@@ -44,13 +45,14 @@ export function Review({ reviewId }: ReviewProps) {
     <SafeAreaView style={styles.container}>
       <MobileHeader title={"marc gabriel"} onLeftPress={backtoprofile} />
       <ScrollView>
-        <Image
+        {/* <Image
           source={{
             uri: reviewItem.image,
           }}
           className=" w-full h-auto aspect-square sm:w-72 sm:h-72"
           alt="image"
-        />
+        /> */}
+        <SwipeableImageCarousel/>
         <VStack className="p-2 gap-2">
           <HStack className="flex justify-between">
             <Text size="lg" bold={true}>
