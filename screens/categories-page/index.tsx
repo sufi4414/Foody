@@ -4,6 +4,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { FeedCard } from '../../components/custom/feedcard';
 import { Link } from 'expo-router';
+import { Grid, GridItem} from '@/components/ui/grid';
 
 export const Categories = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -62,7 +63,38 @@ export const Categories = () => {
 
       {/***************************** Scrollable Categories Section *****************************/}
       {/* NOTE: Need to fix grid + scroll (might be override by other code; need check) */}
-      <div className="grid grid-cols-3 gap-6 max-w-md">
+      <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-md"> {/* 3 columns */}
+        {categories.map((category, index) => (
+          <GridItem 
+          _extra={{
+            className: "col-span-1", // Each item takes 1 column out of 3
+          }}
+          key={index}>
+            <div
+            className="flex flex-col items-center cursor-pointer"
+            onClick={() => toggleCategory(category.name)}
+            >
+              <div
+              className={`w-24 h-24 rounded-full overflow-hidden border-4 transition-all duration-300 ${
+                selectedCategories.includes(category.name)
+                ? "border-blue-500 scale-110"
+                : "border-gray-300"
+              }`}>
+                <img
+                src={category.image}
+                alt={category.name}
+                className="w-full h-full object-cover" />
+
+              </div>
+              <span className="text-sm mt-2 text-center font-medium">
+              {category.name}
+            </span>
+            </div>
+          </GridItem>       
+        ))}
+
+      </Grid>
+      {/* <div className="grid grid gap-6 max-w-md">
         {categories.map((category, index) => (
           <div
           key={index}
@@ -87,7 +119,7 @@ export const Categories = () => {
             </span>
           </div>
         ))}
-      </div>
+      </div> */}
 
 {/**********************************************************************************************************************************/}
 
