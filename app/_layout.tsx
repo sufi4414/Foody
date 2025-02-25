@@ -37,7 +37,6 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  const [styleLoaded, setStyleLoaded] = useState(false);
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
@@ -48,27 +47,36 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  const checkAuth = async () => {
+    console.log("Checking Auth...");
+    const { data: {session}, error } = await supabase.auth.getSession();
+    console.log("Session", session);
+    if (!session) {
+      router.push('/signin');
+  }else{
+    router.push('/(tabs)');
+  }
+};
   useEffect(() => {
     // This can be any condition to redirect, for example, after a certain check
-    router.push('/signin');  // Redirect 
+    // router.push('/signin');  // Redirect 
+    checkAuth();
   }, []);
-  // useLayoutEffect(() => {
-  //   setStyleLoaded(true);
-  // }, [styleLoaded]);
-
-  // if (!loaded || !styleLoaded) {
-  //   return null;
-  // }
 
   return <RootLayoutNav />;
 }
 
+
+
 function RootLayoutNav() {
-  // const colorScheme = useColorScheme();
 
   return (
     <GluestackUIProvider>
-        <Slot/>
+      <Stack>
+        <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
     </GluestackUIProvider>
   );
 }

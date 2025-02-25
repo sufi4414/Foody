@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/button"
 import { ChevronDown, ListFilterPlus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
+import { supabase } from '@/lib/supabase'
 
 
 const SavedPageList = () => {
@@ -39,7 +40,10 @@ const SavedPageList = () => {
       }
       // console.log("isPressed", isPressed);
     };
-    const toggleLocation = () => {
+    const toggleLocation = async () => {
+      supabase.auth.signOut();
+      const { data: {session}, error } = await supabase.auth.getSession();
+      console.log("Session at saved-page: ",session)
       
       if (isLPressed) {
         setIsLPressed(false);
