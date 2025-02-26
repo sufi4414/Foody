@@ -15,10 +15,9 @@ import { ScrollView } from "@/components/ui/scroll-view";
 import { Ellipsis, NutOff } from "lucide-react-native";
 import { Divider } from "@/components/ui/divider";
 import React from "react";
-import { MobileHeader } from "@/components/custom/mobileheader";
 import { useRouter } from "expo-router";
 import { sampleUser, FEED_DATA } from "@/schemas/schemas";
-import { SwipeableImageCarousel } from "@/components/custom/swipeableimagecarousel";
+
 
 
 const MainContent = () => {
@@ -111,7 +110,7 @@ const MainContent = () => {
           title={feed.title}
         />
       ))}
-    <SwipeableImageCarousel/>
+
 
     </Center>
   );
@@ -120,11 +119,6 @@ const MainContent = () => {
 export const Profile = () => {
   return (
     <SafeAreaView className="h-full w-full">
-      <MobileHeader
-        title={sampleUser.username}
-        onLeftPress={() => console.log("Back Pressed")}
-        rightIcon={Ellipsis}
-      />
       <ScrollView className="flex-1">
         <MainContent />
       </ScrollView>

@@ -43,7 +43,6 @@ export function Review({ reviewId }: ReviewProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <MobileHeader title={"marc gabriel"} onLeftPress={backtoprofile} />
       <ScrollView>
         {/* <Image
           source={{
