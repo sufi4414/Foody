@@ -59,8 +59,6 @@ export default function RootLayout() {
   }
 };
   useEffect(() => {
-    // This can be any condition to redirect, for example, after a certain check
-    // router.push('/signin');  // Redirect 
     checkAuth();
   }, []);
 
@@ -74,8 +72,10 @@ function RootLayoutNav() {
   return (
     <GluestackUIProvider>
       <Stack>
-        <Stack.Screen name="(auth)/signin" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+         <Stack.Screen name="(auth)/signin" options={{headerShown:false}}/>
+         <Stack.Screen name="(auth)/signup" options={{headerShown:false}}/>
+         <Stack.Screen name="(auth)/forgot-password" options={{headerShown:false}}/>
+        <Stack.Screen name="(tabs)" options={{headerShown:false}}/> 
       </Stack>
     </GluestackUIProvider>
   );
