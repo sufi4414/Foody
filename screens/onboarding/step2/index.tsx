@@ -27,7 +27,7 @@ const MainContent = () => {
 
   const handleLogSelection = () => {
     console.log("Selected Cuisines Preferences:", values);
-    router.push("/tabs/profile");
+    router.push("/profile");
   };
 
   return (
@@ -120,13 +120,9 @@ const MainContent = () => {
 };
 
 export const Step2 = () => {
-  const router = useRouter();
-  const backtoprofile = () => {
-    router.push("/tabs/profile");
-  };
+
   return (
     <SafeAreaView className="h-full w-full">
-      <MobileHeader title="onboarding" onLeftPress={backtoprofile} />
       <ScrollView className="flex-1">
         <MainContent />
       </ScrollView>

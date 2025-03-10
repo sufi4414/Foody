@@ -40,7 +40,7 @@ const MainContent = () => {
     const handleSaveChanges = () => {
       console.log("Updated Profile Data:", formData);
       // Here, you would typically send the updated data to an API or update your state management system.
-      router.push("/tabs/profile"); // Redirect to the profile screen
+      router.push("/profile"); // Redirect to the profile screen
     };
   
     return (
@@ -124,21 +124,12 @@ const MainContent = () => {
   };
 
 export const EditProfile = () => {
-    const router = useRouter();
 
-    const backtoprofile = () => {
-      router.push("/tabs/profile");
-    };
   return (
     <SafeAreaView className="h-full w-full">
-      <MobileHeader
-        title="Edit Profile"
-        onLeftPress={backtoprofile}
-      />
       <ScrollView className="flex-1">
         <MainContent />
       </ScrollView>
     </SafeAreaView>
   );
 };
-//dexterrr i want api for updating user profile!!!
