@@ -17,9 +17,21 @@ import {
 import { VStack } from "@/components/ui/vstack";
 import { CheckIcon } from "@/components/ui/icon";
 import React, { useState } from "react";
-import { MobileHeader } from "@/components/custom/mobileheader";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
+
+const cuisineOptions = [
+  { label: "Italian", value: "italian" },
+  { label: "Chinese", value: "chinese" },
+  { label: "Japanese", value: "japanese" },
+  { label: "Indian", value: "indian" },
+  { label: "Mexican", value: "mexican" },
+  { label: "Thai", value: "thai" },
+  { label: "Mediterranean", value: "mediterranean" },
+  { label: "French", value: "french" },
+  { label: "Korean", value: "korean" },
+  { label: "Vietnamese", value: "vietnamese" },
+];
 
 const MainContent = () => {
   const router = useRouter();
@@ -31,87 +43,36 @@ const MainContent = () => {
   };
 
   return (
-    <VStack>
+    <VStack className="p-2" space="md">
       <FormControl>
         <FormControlLabel>
-          <FormControlLabelText>
+          <FormControlLabelText className="text-lg">
             What cuisines do you prefer?
           </FormControlLabelText>
         </FormControlLabel>
+
         <CheckboxGroup
           className="my-2"
           value={values}
-          onChange={(keys) => {
-            setValues(keys);
-          }}
+          onChange={(keys) => setValues(keys)}
         >
-          <VStack space="sm">
-            <Checkbox size="sm" value="italian">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Italian</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="chinese">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Chinese</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="japanese">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Japanese</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="indian">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Indian</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="mexican">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Mexican</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="thai">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Thai</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="mediterranean">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Mediterranean</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="french">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>French</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="korean">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Korean</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="vietnamese">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Vietnamese</CheckboxLabel>
-            </Checkbox>
+          <VStack space="md">
+            {cuisineOptions.map((option) => (
+              <Checkbox size="md" value={option.value} key={option.value}>
+                <CheckboxIndicator className="mr-2">
+                  <CheckboxIcon as={CheckIcon} />
+                </CheckboxIndicator>
+                <CheckboxLabel>{option.label}</CheckboxLabel>
+              </Checkbox>
+            ))}
           </VStack>
         </CheckboxGroup>
+
         <FormControlHelper>
           <FormControlHelperText>Select all that apply</FormControlHelperText>
         </FormControlHelper>
       </FormControl>
+
       <Button onPress={handleLogSelection}>
         <ButtonText>Done</ButtonText>
       </Button>
@@ -120,7 +81,6 @@ const MainContent = () => {
 };
 
 export const Step2 = () => {
-
   return (
     <SafeAreaView className="h-full w-full">
       <ScrollView className="flex-1">

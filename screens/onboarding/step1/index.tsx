@@ -17,9 +17,18 @@ import {
 import { VStack } from "@/components/ui/vstack";
 import { CheckIcon } from "@/components/ui/icon";
 import React, { useState } from "react";
-import { MobileHeader } from "@/components/custom/mobileheader";
-import { Button, ButtonText } from "@/components/ui/button"; // Assuming you have a Button component
+import { Button, ButtonText } from "@/components/ui/button"; 
 import {useRouter} from 'expo-router';
+
+const dietaryOptions = [
+  { label: "Dairy Allergy", value: "dairy" },
+  { label: "Gluten Free", value: "gluten" },
+  { label: "Halal", value: "halal" },
+  { label: "Vegan", value: "vegan" },
+  { label: "Nut Free", value: "nutFree" },
+  { label: "Kosher", value: "kosher" },
+  { label: "Test", value: "test" },
+];
 
 const MainContent = () => {
     const router = useRouter();
@@ -28,14 +37,14 @@ const MainContent = () => {
 
   const handleLogSelection = () => {
     console.log("Selected Dietary Restrictions:", values);
-    router.push('/onboarding/step2');  // Redirect to the tabs screen
+    router.push('/onboarding/step2');  
   };
 
   return (
-    <VStack>
+    <VStack className="p-2" space="md">
       <FormControl>
         <FormControlLabel>
-          <FormControlLabelText>Any dietary restrictions</FormControlLabelText>
+          <FormControlLabelText className="text-lg">Any dietary restrictions</FormControlLabelText>
         </FormControlLabel>
         <CheckboxGroup
           className="my-2"
@@ -44,43 +53,17 @@ const MainContent = () => {
             setValues(keys);
           }}
         >
-          <VStack space="sm">
-            <Checkbox size="sm" value="dairy">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Dairy Allergy</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="gluten">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Gluten Free</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="halal">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Halal</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="vegan">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Vegan</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="nutFree">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Nut Free</CheckboxLabel>
-            </Checkbox>
-            <Checkbox size="sm" value="kosher">
-              <CheckboxIndicator className="mr-2">
-                <CheckboxIcon as={CheckIcon} />
-              </CheckboxIndicator>
-              <CheckboxLabel>Kosher</CheckboxLabel>
-            </Checkbox>
+          <VStack space="md">
+          {dietaryOptions.map((option) => (
+              <Checkbox size="md" value={option.value} key={option.value}>
+                <CheckboxIndicator className="mr-2">
+                  <CheckboxIcon as={CheckIcon} />
+                </CheckboxIndicator>
+                <CheckboxLabel className="text-base">
+                  {option.label}
+                </CheckboxLabel>
+              </Checkbox>
+            ))}
           </VStack>
         </CheckboxGroup>
         <FormControlHelper>
@@ -90,7 +73,7 @@ const MainContent = () => {
         </FormControlHelper>
       </FormControl>
       <Button onPress={handleLogSelection}>
-          <ButtonText>Done</ButtonText>
+          <ButtonText>Next</ButtonText>
       </Button>
     </VStack>
   );

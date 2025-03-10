@@ -49,7 +49,7 @@ const MainContent = () => {
   const handleSaveChanges = () => {
     console.log("Updated Profile Data:", formData);
     // Here, you would typically send the updated data to an API or update your state management system.
-    router.push("/nextScreen"); // Navigate to the next screen (modify as needed)
+    router.push("/onboarding/step1"); // Navigate to the next screen (modify as needed)
   };
 
   return (
