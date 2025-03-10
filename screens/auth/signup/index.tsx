@@ -118,7 +118,7 @@ const SignUpWithLeftBackground = () => {
           </Toast>
         ),
       });
-      router.push("/signin"); // ✅ Redirect user to Sign-In page
+      router.push("/onboarding/setup"); // ✅ Redirect user to set up
     }
   };
   const [showPassword, setShowPassword] = useState(false);

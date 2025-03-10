@@ -17,12 +17,13 @@ const tabsData = [
       {
         id: "2",
         name: "John",
+        // eatery: "McDonalds",
         image:
           "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
         numberlikes: 3,
-        title: "good food and great company",
+        title: "good pancake",
         isFavourite: true,
         isBookmarked: true,
       },
@@ -57,13 +58,13 @@ const tabsData = [
     data: [
       {
         id: "2",
-        name: "John",
+        name: "Marc",
         image:
           "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
         numberlikes: 3,
-        title: "good food and great company",
+        title: "good coffee",
         isFavourite: true,
         isBookmarked: true,
       },
@@ -78,7 +79,7 @@ const tabsData = [
         image:
           "https://www.netcostmarket.com/wp-content/uploads/2021/05/picnic-on-the-beach.jpg",
         avatar:
-          "https://gluestack.github.io/public-blog-video-assets/parrot.png",
+          "",
         numberlikes: 3,
         title: "good food and great company",
         isFavourite: true,
@@ -91,13 +92,13 @@ const tabsData = [
     data: [
       {
         id: "2",
-        name: "John",
+        name: "Gab",
         image:
           "https://curlygirlkitchen.com/wp-content/uploads/2024/01/Rainbow-Cake-High-Altitude-Sprinkles-Lucky-Charms-St-Patricks-Day-007.jpg",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
         numberlikes: 3,
-        title: "good food and great company",
+        title: "nice bday food",
         isFavourite: true,
         isBookmarked: true,
       },
@@ -114,7 +115,7 @@ const tabsData = [
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
         numberlikes: 3,
-        title: "good food and great company",
+        title: "vibes bro",
         isFavourite: true,
         isBookmarked: true,
       },
