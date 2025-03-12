@@ -5,13 +5,16 @@ import { Search } from "lucide-react-native";
 import { Text } from "@/components/ui/text";
 import { ScrollView } from "@/components/ui/scroll-view";
 import HomeFeedFold from "@/components/custom/categoriesTabV2";
-import { useFonts, Bungee_400Regular } from "@expo-google-fonts/bungee";
 
+import { useRouter } from 'expo-router';
+import { Pressable } from 'react-native';
 
 const MainContent = () => {
-  const [fontsLoaded] = useFonts({ Bungee: Bungee_400Regular });
+const router = useRouter();
 
-  if (!fontsLoaded) return null;
+  const handleSearchPress = () => {
+    router.push("/search/searchpage"); 
+  };
 
   return (
     <>
@@ -24,12 +27,19 @@ const MainContent = () => {
         >
           Foody
         </Text>
-        <Input className="rounded-full px-3 py-1.5 w-full">
-          <InputSlot className="ml-3">
-            <InputIcon as={Search} />
-          </InputSlot>
-          <InputField placeholder="Search" className="text-sm" />
-        </Input>
+        <Pressable onPress={handleSearchPress}>
+          <Input className="rounded-full px-3 py-1.5 w-full pointer-events-none">
+            <InputSlot className="ml-3">
+              <InputIcon as={Search} />
+            </InputSlot>
+            <InputField 
+              placeholder="Search" 
+              className="text-sm"
+              editable={false} // Makes the field uneditable
+              pointerEvents="none"
+            />
+          </Input>
+        </Pressable>
       </VStack>
       <>
         <HomeFeedFold />
