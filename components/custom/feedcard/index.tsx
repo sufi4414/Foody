@@ -99,7 +99,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
       <Box className="flex-row items-center justify-between w-full p-2 ">
         {/* Left Side: Like Button and Count */}
         <Box className="flex-row items-center">
-          <HeartButton
+          {/* <HeartButton
             size="xl"
             className="mr-2"
             isFavourite={isFav}
@@ -107,7 +107,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
           />
           <Text size="md" className="text-gray-500">
             {numberlikes}
-          </Text>
+          </Text> */}
         </Box>
 
         {/* Right Side: Bookmark Button */}
