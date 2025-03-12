@@ -1,12 +1,10 @@
 import React from "react";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
-import { Icon } from "@/components/ui/icon";
 import { Image } from "@/components/ui/image";
 import { Pressable } from "@/components/ui/pressable";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
-import { Tooltip, TooltipContent, TooltipText } from "@/components/ui/tooltip";
 import { ScrollView } from "react-native";
 import { FeedCard } from "../feedcard";
 
@@ -23,7 +21,7 @@ const tabsData = [
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
         numberlikes: 3,
-        title: "good pancake",
+        title: "good pancake!",
         isFavourite: true,
         isBookmarked: true,
       },
@@ -176,10 +174,10 @@ const tabs = [
 const HomeFeedFold = () => {
   const [activeTab, setActiveTab] = React.useState(tabs[0]);
   return (
-    <Box className="w-full">
+    <VStack>
       <CatTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
-      <TabPanelData activeTab={activeTab} />
-    </Box>
+      <TabPanelData activeTab={activeTab}/>
+    </VStack>
   );
 };
 
@@ -234,9 +232,9 @@ const TabPanelData = ({ activeTab }: any) => {
   );
 
   return (
-    <Box className="mt-0 w-full">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <VStack space="lg">
+    <>
+      {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+        
           {currentTabData?.data.map((feedItem: any, index: number) => (
             <FeedCard
               key={feedItem.id + index} // In case ids are not unique
@@ -250,9 +248,9 @@ const TabPanelData = ({ activeTab }: any) => {
               title={feedItem.title}
             />
           ))}
-        </VStack>
-      </ScrollView>
-    </Box>
+        
+      {/* </ScrollView> */}
+    </>
   );
 };
 
