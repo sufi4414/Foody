@@ -1,7 +1,5 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { MobileHeader } from "@/components/custom/mobileheader";
-import { Ellipsis } from "lucide-react-native";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { useRouter } from "expo-router";
 import HeartButton from "@/components/custom/heartButton/HeartButton";
@@ -21,6 +19,13 @@ import { VStack } from "@/components/ui/vstack";
 import { Divider } from "@/components/ui/divider";
 import { FEED_DATA } from "@/schemas/schemas";
 import { SwipeableImageCarousel } from "@/components/custom/swipeableimagecarousel";
+import {
+  Button,
+  ButtonText,
+  ButtonSpinner,
+  ButtonIcon,
+  ButtonGroup,
+} from "@/components/ui/button";
 
 interface ReviewProps {
   reviewId: string;
@@ -28,9 +33,7 @@ interface ReviewProps {
 
 export function Review({ reviewId }: ReviewProps) {
   const router = useRouter();
-  const backtoprofile = () => {
-    router.push("/tabs/profile");
-  };
+
   const reviewItem = FEED_DATA.find((item) => item.id === reviewId);
 
   if (!reviewItem) {
@@ -41,67 +44,32 @@ export function Review({ reviewId }: ReviewProps) {
     );
   }
 
+
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {/* <Image
-          source={{
-            uri: reviewItem.image,
-          }}
-          className=" w-full h-auto aspect-square sm:w-72 sm:h-72"
-          alt="image"
-        /> */}
-        <SwipeableImageCarousel/>
+        <SwipeableImageCarousel />
         <VStack className="p-2 gap-2">
           <HStack className="flex justify-between">
-            <Text size="lg" bold={true}>
+            <Text size="lg" bold={true} style={styles.restaurantName}>
               restaurant name placeholder
             </Text>
-            <Text size="lg" bold={true}>
+            
+            {/* <Text size="lg" bold={true}>
               5/10
-            </Text>
+            </Text> */}
+            <Button
+              style={styles.buttonRating}
+              size="lg"
+              className="rounded-full p-3.5"
+              variant="outline"
+              disabled={true}
+            >
+              <ButtonText style={styles.ratingText}>4</ButtonText>
+            </Button>
           </HStack>
 
-          <Text size="md" bold={true}>
-            Friends that visited
-          </Text>
-
-          <HStack>
-            <AvatarGroup className="p-2">
-              <Avatar size="sm">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                  }}
-                />
-              </Avatar>
-              <Avatar size="sm">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-                  }}
-                />
-              </Avatar>
-              <Avatar size="sm">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1614289371518-722f2615943d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-                  }}
-                />
-              </Avatar>
-              <Avatar size="sm">
-                <AvatarFallbackText>John Doe</AvatarFallbackText>
-                <AvatarImage
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-                  }}
-                />
-              </Avatar>
-            </AvatarGroup>
-          </HStack>
           <Text size="lg" bold={true}>
             {reviewItem.title} . id: {reviewId}
           </Text>
@@ -121,10 +89,10 @@ export function Review({ reviewId }: ReviewProps) {
           <Box className="flex-row items-center justify-between w-full p-2">
             {/* Left Side: Like Button and Count */}
             <Box className="flex-row items-center">
-              <HeartButton size="xl" className="mr-2" />
+              {/* <HeartButton size="xl" className="mr-2" />
               <Text size="md" className="text-gray-500">
                 100
-              </Text>
+              </Text> */}
             </Box>
 
             {/* Right Side: Bookmark Button */}
@@ -140,5 +108,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  buttonRating: {
+    width: 25,
+    height: 25,
+    flexShrink: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#13B018",
+    marginLeft: "auto",
+    padding: 0,
+  },
+  ratingText: {
+    color: "#2B2B2B",
+    textAlign: "center",
+    fontSize: 8, // Adjusted font size to fit within the button
+    fontStyle: "normal",
+    fontWeight: "300",
+    letterSpacing: 0.25,
+  },
+  restaurantName: {
+    color: '#072755',
   },
 });

@@ -15,6 +15,7 @@ import HeartButton from "../heartButton/HeartButton";
 import BookmarkButton from "../bookmarkButton/BookmarkButton";
 import { useRouter } from "expo-router";
 import { Pressable } from "@/components/ui/pressable";
+import { StyleSheet } from "react-native";
 
 interface FeedCardProps {
   id: string;
@@ -65,7 +66,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
             {avatar && <AvatarImage source={{ uri: avatar }} />}
           </Avatar>
           <VStack>
-          <Text size="md" bold={true}>
+          <Text size="md" bold={true} style={styles.restaurantName}>
               Little Italian Cafe
             </Text>
             <Text size="md" className="text-gray-500">
@@ -123,3 +124,9 @@ const FeedCard: React.FC<FeedCardProps> = ({
 };
 
 export { FeedCard };
+
+const styles = StyleSheet.create({
+  restaurantName: {
+    color: '#072755',
+  },
+});

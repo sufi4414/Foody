@@ -119,7 +119,7 @@ const MainContent = () => {
 export const Profile = () => {
   return (
     <SafeAreaView className="h-full w-full">
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <MainContent />
       </ScrollView>
     </SafeAreaView>
