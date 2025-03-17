@@ -14,8 +14,8 @@ import { useRouter } from 'expo-router';
 import { supabase } from '@/lib/supabase'
 import SignIn from "./(auth)/signin";
 import { Session } from '@supabase/supabase-js'
-
 import "../global.css";
+import useAuthListener from "@/hooks/useAuthListener";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -36,7 +36,7 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
-
+  useAuthListener();
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
@@ -51,10 +51,13 @@ export default function RootLayout() {
   const checkAuth = async () => {
     console.log("Checking Auth...");
     const { data: {session}, error } = await supabase.auth.getSession();
-    console.log("Session", session);
+    // console.log("Session", session);
+    console.log("uid", session?.user.id);
     if (!session) {
       router.push('/signin');
+      // router.push('/(tabs)');
   }else{
+    // console.log("Access Token:", session.access_token); 
     router.push('/(tabs)');
   }
 };

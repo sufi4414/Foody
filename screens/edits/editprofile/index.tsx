@@ -9,24 +9,23 @@ import {
 } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import { sampleUser } from "@/schemas/schemas";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity, Image, View, Text } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MainContent = () => {
   const router = useRouter();
 
-  // State to manage form data
   const [formData, setFormData] = useState({
-    username: sampleUser.username,
-    email: sampleUser.email,
-    fullName: sampleUser.fullName,
-    bio: sampleUser.bio || "", // Handle optional fields
-    profilePicture: sampleUser.profilePicture || "", // Handle optional fields
+    username: "",
+    email: "",
+    fullName: "",
+    bio: "",
+    profilePicture: "",
   });
 
   // Handle input changes
@@ -39,7 +38,7 @@ const MainContent = () => {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.5,
@@ -52,11 +51,80 @@ const MainContent = () => {
     }
   };
 
-  // Handle form submission
-  const handleSaveChanges = () => {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const jwt = await AsyncStorage.getItem("jwt");
+        if (!jwt) {
+          console.error("No JWT token found");
+          return;
+        }
+        const profileResponse = await fetch("http://10.0.2.2:8000/user/myprofile", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+        });
+        if (!profileResponse.ok) {
+          console.error("Failed to fetch profile data", profileResponse.status);
+          return;
+        }
+        const data = await profileResponse.json();
+        console.log("Fetched Profile Data:", data);
+        // Map API response keys to formData keys
+        setFormData({
+          username: data.username || "",
+          email: data.email || "",
+          fullName: data.fullname || "",
+          bio: data.bio || "",
+          profilePicture: data.avatar_url || "",
+        });
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleSaveChanges = async () => {
     console.log("Updated Profile Data:", formData);
-    // Here, you would typically send the updated data to an API or update your state management system.
-    router.push("/profile"); // Redirect to the profile screen
+    try {
+      const jwt = await AsyncStorage.getItem("jwt");
+      if (!jwt) {
+        console.error("No JWT token found");
+        return;
+      }
+      // Build payload; note keys must match the API's expectations
+      const payload = {
+        username: formData.username,
+        fullname: formData.fullName,
+        avatar_url: formData.profilePicture,
+        bio: formData.bio,
+        // Optionally, include onboarding status if needed:
+        // onboarding: false,
+      };
+
+      const response = await fetch("http://10.0.2.2:8000/user/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error updating profile:", errorData);
+        return;
+      }
+      const data = await response.json();
+      console.log("Profile updated successfully:", data);
+      router.push("/profile"); // Redirect to the profile screen
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   return (
