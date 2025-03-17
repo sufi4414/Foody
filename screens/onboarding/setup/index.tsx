@@ -12,10 +12,12 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity, Image, View, Text } from "react-native";
+import { Session } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
 
 const MainContent = () => {
   const router = useRouter();
-
+  
   // Initialize form data with blank fields for initial setup
   const [formData, setFormData] = useState({
     username: "",
@@ -32,7 +34,7 @@ const MainContent = () => {
   // Function to pick an image from the user's library
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.5,
@@ -46,11 +48,49 @@ const MainContent = () => {
   };
 
   // Handle form submission
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     console.log("Updated Profile Data:", formData);
-    // Here, you would typically send the updated data to an API or update your state management system.
-    router.push("/onboarding/step1"); // Navigate to the next screen (modify as needed)
+  
+    // Retrieve the session to get the Supabase UID
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !sessionData.session) {
+      console.error("Error retrieving session:", sessionError);
+      return;
+    }
+    const uid = sessionData.session.user.id;
+    console.log("Supabase UID:", uid);
+  
+    // Create payload for the POST request
+    const payload = {
+      id: uid,
+      username: formData.username,
+      fullname: formData.fullName,
+      avatar_url: formData.profilePicture, // Adjust if you need to upload and then use a URL instead
+      bio: formData.bio,
+      onboarding: false, // Set to true or false depending on your onboarding flow
+    };
+  
+    try {
+      const response = await fetch("http://10.0.2.2:8000/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error creating user:", errorData);
+        return;
+      }
+      const data = await response.json();
+      console.log("User created successfully:", data);
+      router.push("/onboarding/step1"); // Navigate to the next screen
+    } catch (error) {
+      console.error("Error creating user:", error);
+    }
   };
+  
 
   return (
     <VStack space="md" className="p-4">
