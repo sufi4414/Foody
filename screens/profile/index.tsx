@@ -17,7 +17,7 @@ import { Divider } from "@/components/ui/divider";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { sampleUser, FEED_DATA } from "@/schemas/schemas";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useProfileData } from "@/hooks/useProfileData";
 
 interface ProfileData {
   avatar_url: string;
@@ -35,82 +35,21 @@ interface ProfileData {
 const MainContent = () => {
   const router = useRouter();
 
-  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const { profile, loading, error } = useProfileData();
 
-  const fetchProfile = async () => {
-    try {
-      const jwt = await AsyncStorage.getItem("jwt");
-      if (!jwt) {
-        console.log("No JWT token found");
-        return;
-      }
-
-      // Fetch profile data
-      const profileResponse = await fetch("http://10.0.2.2:8000/user/myprofile", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      if (!profileResponse.ok) {
-        console.error("Failed to fetch profile data", profileResponse.status);
-        return;
-      }
-      const profileData: ProfileData = await profileResponse.json();
-      console.log("Fetched Profile Data:", profileData);
-
-      // Fetch followers list
-      const followersResponse = await fetch("http://10.0.2.2:8000/user/followers", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      let followersCount = 0;
-      if (followersResponse.ok) {
-        const followersData = await followersResponse.json();
-        // Assuming the API returns an array
-        followersCount = Array.isArray(followersData) ? followersData.length : 0;
-      } else {
-        console.error("Failed to fetch followers", followersResponse.status);
-      }
-
-      // Fetch followings list
-      const followingsResponse = await fetch("http://10.0.2.2:8000/user/followings", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-      let followingCount = 0;
-      if (followingsResponse.ok) {
-        const followingsData = await followingsResponse.json();
-        followingCount = Array.isArray(followingsData) ? followingsData.length : 0;
-      } else {
-        console.error("Failed to fetch followings", followingsResponse.status);
-      }
-
-      // Update profile data with follower counts
-      profileData.followers = followersCount;
-      profileData.following = followingCount;
-
-      setProfile(profileData);
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  if (!profile) {
+  // While the profile is loading or if there's an error, render appropriate UI.
+  if (loading) {
     return (
       <Center className="mt-14">
         <Text>Loading Profile...</Text>
+      </Center>
+    );
+  }
+
+  if (error || !profile) {
+    return (
+      <Center className="mt-14">
+        <Text>Error loading profile</Text>
       </Center>
     );
   }
@@ -134,10 +73,10 @@ const MainContent = () => {
 
         <VStack className="gap-1 w-full items-center">
           <Text size="2xl" className="font-roboto text-dark">
-          {profile.fullname}
+            {profile.fullname}
           </Text>
           <Text className="font-roboto text-sm text-typograpphy-700">
-          {profile.bio}
+            {profile.bio}
           </Text>
         </VStack>
 
