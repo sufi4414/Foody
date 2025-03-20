@@ -18,24 +18,14 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { sampleUser, FEED_DATA } from "@/schemas/schemas";
 import { useProfileData } from "@/hooks/useProfileData";
-
-interface ProfileData {
-  avatar_url: string;
-  bio: string;
-  created_at: string;
-  fullname: string;
-  id: string;
-  onboarding: boolean;
-  updated_at: string;
-  username: string;
-  followers?: number;
-  following?: number;
-}
+import ProfileMenu from "@/components/custom/profileMenu/ProfileMenu";
+import { Box } from "@/components/ui/box";
+import { useAuth } from "@/providers/AuthProviders";
 
 const MainContent = () => {
   const router = useRouter();
-
-  const { profile, loading, error } = useProfileData();
+  const { myId } = useAuth();
+  const { profile, reviews, loading, error } = useProfileData();
 
   // While the profile is loading or if there's an error, render appropriate UI.
   if (loading) {
@@ -62,14 +52,22 @@ const MainContent = () => {
   };
 
   return (
+    <>
+    <Box className="absolute top-0 right-0 z-10 p-4">
+        <ProfileMenu />
+      </Box>
     <Center className=" md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4 mt-4">
+      
       <VStack space="lg" className="items-center">
-        <Avatar size="2xl" className="bg-primary-600">
-          <AvatarImage
-            alt="Profile Image"
-            source={{ uri: profile.avatar_url }}
-          />
-        </Avatar>
+        
+        
+          <Avatar size="2xl" className="bg-primary-600">
+            <AvatarImage
+              alt="Profile Image"
+              source={{ uri: profile.avatar_url }}
+            />
+          </Avatar>
+          
 
         <VStack className="gap-1 w-full items-center">
           <Text size="2xl" className="font-roboto text-dark">
@@ -122,26 +120,29 @@ const MainContent = () => {
         </HStack>
       </VStack>
 
-      {FEED_DATA.map((feed, index) => (
+      {reviews.map((review) => (
         <FeedCard
-          key={index}
-          id={feed.id}
-          isFavourite={feed.isFavourite}
-          isBookmarked={feed.isBookmarked}
-          name={profile.fullname}
-          image={feed.image}
+          myId={myId}
+          key={review.review_id}
+          userId = {profile.id}
+          reviewId={review.review_id}
+          eateryId={review.eatery_id}
+          isBookmarked={review.is_liked}
+          name={review.username}
+          image={FEED_DATA[0].image} //fix this
           avatar={profile.avatar_url}
-          numberlikes={feed.numberlikes}
-          title={feed.title}
+          title={review.review_title}
         />
       ))}
     </Center>
+    </>
+    
   );
 };
 
 export const Profile = () => {
   return (
-    <SafeAreaView className="h-full w-full">
+    <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <MainContent />
       </ScrollView>

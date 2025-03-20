@@ -2,18 +2,10 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { useRouter } from "expo-router";
-import HeartButton from "@/components/custom/heartButton/HeartButton";
 import BookmarkButton from "@/components/custom/bookmarkButton/BookmarkButton";
 import { Box } from "@/components/ui/box";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Text } from "@/components/ui/text";
-import { Image } from "@/components/ui/image";
-import {
-  Avatar,
-  AvatarFallbackText,
-  AvatarGroup,
-  AvatarImage,
-} from "@/components/ui/avatar";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Divider } from "@/components/ui/divider";
@@ -22,85 +14,54 @@ import { SwipeableImageCarousel } from "@/components/custom/swipeableimagecarous
 import {
   Button,
   ButtonText,
-  ButtonSpinner,
-  ButtonIcon,
-  ButtonGroup,
+
 } from "@/components/ui/button";
+import { useReviewPage } from "@/hooks/useReviewPage";
 
 interface ReviewProps {
   reviewId: string;
 }
 
 export function Review({ reviewId }: ReviewProps) {
-  const router = useRouter();
+  const { review, loading, error } = useReviewPage(reviewId);
 
-  const reviewItem = FEED_DATA.find((item) => item.id === reviewId);
-
-  if (!reviewItem) {
+  if (!review) {
     return (
       <SafeAreaView style={styles.container}>
         <Text>Review not found.</Text>
       </SafeAreaView>
     );
   }
-
-
-
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <SwipeableImageCarousel />
-        <VStack className="p-2 gap-2">
-          <HStack className="flex justify-between">
-            <Text size="lg" bold={true} style={styles.restaurantName}>
-              restaurant name placeholder
-            </Text>
-            
-            {/* <Text size="lg" bold={true}>
-              5/10
-            </Text> */}
-            <Button
-              style={styles.buttonRating}
-              size="lg"
-              className="rounded-full p-3.5"
-              variant="outline"
-              disabled={true}
-            >
-              <ButtonText style={styles.ratingText}>4</ButtonText>
-            </Button>
-          </HStack>
-
-          <Text size="lg" bold={true}>
-            {reviewItem.title} . id: {reviewId}
+    <ScrollView>
+      <SwipeableImageCarousel />
+      <VStack className="p-2 gap-2">
+        <HStack className="flex justify-between">
+          <Text size="lg" bold style={styles.restaurantName}>
+          Eastery id: {review.id}
           </Text>
-
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum
-          </Text>
-
-          <Divider />
-
-          <Box className="flex-row items-center justify-between w-full p-2">
-            {/* Left Side: Like Button and Count */}
-            <Box className="flex-row items-center">
-              {/* <HeartButton size="xl" className="mr-2" />
-              <Text size="md" className="text-gray-500">
-                100
-              </Text> */}
-            </Box>
-
-            {/* Right Side: Bookmark Button */}
-            <BookmarkButton size="xl" className="mr-2" />
-          </Box>
-        </VStack>
-      </ScrollView>
-    </SafeAreaView>
+          <Button
+            style={styles.buttonRating}
+            size="lg"
+            className="rounded-full p-3.5"
+            variant="outline"
+            disabled
+          >
+            <ButtonText style={styles.ratingText}>{review.rating}</ButtonText>
+          </Button>
+        </HStack>
+        <Text size="lg" bold>
+          {review.title} 
+        </Text>
+        <Text>{review.content}</Text>
+        <Divider />
+        <HStack className="flex-row items-center justify-between w-full p-2">
+          <BookmarkButton size="xl" className="mr-2" />
+        </HStack>
+      </VStack>
+    </ScrollView>
+  </SafeAreaView>
   );
 }
 
