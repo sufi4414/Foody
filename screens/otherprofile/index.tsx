@@ -18,10 +18,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { sampleUser, FEED_DATA } from "@/schemas/schemas";
 import { useProfileData } from "@/hooks/useProfileData";
-import ProfileMenu from "@/components/custom/profileMenu/profileMenu";
-import { Box } from "@/components/ui/box";
 
-const MainContent = () => {
+interface OtherProfileProps {
+    profileId: string;
+  }
+
+
+  const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
   const router = useRouter();
 
   const { profile, reviews, loading, error } = useProfileData();
@@ -43,30 +46,21 @@ const MainContent = () => {
     );
   }
 
-  const editDietary = () => {
-    router.push("/onboarding/step1");
-  };
-  const editProfile = () => {
-    router.push("/edits/editprofile");
+
+  const follow = () => {
+    console.log("Followed");
+    console.log(profileId);
   };
 
   return (
-    <>
-    <Box className="absolute top-0 right-0 z-10 p-4">
-        <ProfileMenu />
-      </Box>
     <Center className=" md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4 mt-4">
-      
       <VStack space="lg" className="items-center">
-        
-        
-          <Avatar size="2xl" className="bg-primary-600">
-            <AvatarImage
-              alt="Profile Image"
-              source={{ uri: profile.avatar_url }}
-            />
-          </Avatar>
-          
+        <Avatar size="2xl" className="bg-primary-600">
+          <AvatarImage
+            alt="Profile Image"
+            source={{ uri: profile.avatar_url }}
+          />
+        </Avatar>
 
         <VStack className="gap-1 w-full items-center">
           <Text size="2xl" className="font-roboto text-dark">
@@ -100,48 +94,38 @@ const MainContent = () => {
           <Button
             variant="outline"
             action="secondary"
-            onPress={editProfile}
+            onPress={follow}
             className="gap-3 relative"
           >
-            <ButtonText className="text-dark">Edit Profile</ButtonText>
-            <ButtonIcon as={EditIcon} />
+            <ButtonText className="text-dark">Follow</ButtonText>
+            
           </Button>
 
-          <Button
-            variant="outline"
-            action="secondary"
-            onPress={editDietary}
-            className="gap-3 relative"
-          >
-            <ButtonText className="text-dark">Edit Dietary</ButtonText>
-            <ButtonIcon as={NutOff} />
-          </Button>
         </HStack>
+        
       </VStack>
 
       {reviews.map((review) => (
-        <FeedCard
-          userId = {profile.id}
-          reviewId={review.review_id}
-          eateryId={review.eatery_id}
-          isBookmarked={review.is_liked}
-          name={review.username}
-          image={FEED_DATA[0].image} //fix this
-          avatar={profile.avatar_url}
-          title={review.review_title}
+          <FeedCard
+            key={review.review_id}
+            reviewId={review.review_id}
+            eateryId={review.eatery_id}
+            isBookmarked={review.is_liked}
+            name={review.username}
+            image={FEED_DATA[0].image} //fix this
+            avatar={profile.avatar_url}
+            title={review.review_title}
         />
       ))}
     </Center>
-    </>
-    
   );
 };
 
-export const Profile = () => {
+export const OtherProfile = ({ profileId }: OtherProfileProps) => {
   return (
     <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <MainContent />
+        <MainContent profileId={profileId}/>
       </ScrollView>
     </SafeAreaView>
   );

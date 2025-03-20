@@ -15,7 +15,6 @@ const tabsData = [
       {
         id: "2",
         name: "John",
-        // eatery: "McDonalds",
         image:
           "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         avatar:
@@ -237,7 +236,6 @@ const TabPanelData = ({ activeTab }: any) => {
         
           {currentTabData?.data.map((feedItem: any, index: number) => (
             <FeedCard
-              key={feedItem.id + index} // In case ids are not unique
               eateryId={1}
               reviewId={feedItem.id}
               isBookmarked={feedItem.isBookmarked}
