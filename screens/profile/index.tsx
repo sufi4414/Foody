@@ -19,23 +19,10 @@ import { useRouter } from "expo-router";
 import { sampleUser, FEED_DATA } from "@/schemas/schemas";
 import { useProfileData } from "@/hooks/useProfileData";
 
-interface ProfileData {
-  avatar_url: string;
-  bio: string;
-  created_at: string;
-  fullname: string;
-  id: string;
-  onboarding: boolean;
-  updated_at: string;
-  username: string;
-  followers?: number;
-  following?: number;
-}
-
 const MainContent = () => {
   const router = useRouter();
 
-  const { profile, loading, error } = useProfileData();
+  const { profile, reviews, loading, error } = useProfileData();
 
   // While the profile is loading or if there's an error, render appropriate UI.
   if (loading) {
@@ -120,19 +107,19 @@ const MainContent = () => {
             <ButtonIcon as={NutOff} />
           </Button>
         </HStack>
+        
       </VStack>
 
-      {FEED_DATA.map((feed, index) => (
-        <FeedCard
-          key={index}
-          id={feed.id}
-          isFavourite={feed.isFavourite}
-          isBookmarked={feed.isBookmarked}
-          name={profile.fullname}
-          image={feed.image}
-          avatar={profile.avatar_url}
-          numberlikes={feed.numberlikes}
-          title={feed.title}
+      {reviews.map((review) => (
+          <FeedCard
+            key={review.review_id}
+            reviewId={review.review_id}
+            eateryId={review.eatery_id}
+            isBookmarked={review.is_liked}
+            name={review.username}
+            image={FEED_DATA[0].image} //fix this
+            avatar={profile.avatar_url}
+            title={review.review_title}
         />
       ))}
     </Center>
@@ -141,7 +128,7 @@ const MainContent = () => {
 
 export const Profile = () => {
   return (
-    <SafeAreaView className="h-full w-full">
+    <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <MainContent />
       </ScrollView>

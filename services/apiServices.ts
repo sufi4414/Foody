@@ -1,7 +1,7 @@
 // services/apiService.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const BASE_URL = "http://192.168.1.223:8000";
+export const BASE_URL = "http://10.0.2.2:8000";
 
 export const getProfile = async () => {
   const jwt = await AsyncStorage.getItem("jwt");
@@ -96,3 +96,48 @@ export const fetchEateries = async () => {
   }
   return await response.json();
 };
+
+export const createUser = async (payload: any) => {
+  // Make a POST request to create a user
+  const response = await fetch(`${BASE_URL}/user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || `Error creating user: ${response.status}`
+    );
+  }
+  return response.json();
+};
+
+export const getUserReviews = async (targetUserId: string) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+  const response = await fetch(
+    `${BASE_URL}/reviewpreviews/userprofile/${targetUserId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error(`Error fetching reviews: ${response.status}`);
+  }
+  return response.json();
+};
+
+export const getReview = async (reviewId: string) => {
+  const response = await fetch(`${BASE_URL}/reviews/get/${reviewId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch review");
+  }
+  return response.json();
+}

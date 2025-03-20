@@ -21,7 +21,7 @@ const tabsData = [
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
         numberlikes: 3,
-        title: "good pancake!",
+        title: "good food and great company",
         isFavourite: true,
         isBookmarked: true,
       },
@@ -183,7 +183,7 @@ const HomeFeedFold = () => {
 
 const CatTabs = ({ tabs, activeTab, setActiveTab }: any) => {
   return (
-    <Box className="border-b border-outline-50 md:border-b-0 md:border-transparent">
+    <Box>
       <Box className="py-1">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <HStack space="lg" className="mx-0.5 xl:gap-5 2xl:gap-6">
@@ -191,7 +191,7 @@ const CatTabs = ({ tabs, activeTab, setActiveTab }: any) => {
               return (
                 <Pressable
                   key={tab.title}
-                  className={`my-0.5 py-1 ${
+                  className={`flex-col items-center my-0.5 py-1 ${
                     activeTab === tab ? "border-b-[3px]" : "border-b-0"
                   } border-outline-900 hover:border-b-[3px] ${
                     activeTab === tab
@@ -238,13 +238,12 @@ const TabPanelData = ({ activeTab }: any) => {
           {currentTabData?.data.map((feedItem: any, index: number) => (
             <FeedCard
               key={feedItem.id + index} // In case ids are not unique
-              id={feedItem.id}
-              isFavourite={feedItem.isFavourite}
+              eateryId={1}
+              reviewId={feedItem.id}
               isBookmarked={feedItem.isBookmarked}
               name={feedItem.name}
               image={feedItem.image}
               avatar={feedItem.avatar}
-              numberlikes={feedItem.numberlikes}
               title={feedItem.title}
             />
           ))}

@@ -11,41 +11,32 @@ import { VStack } from "@/components/ui/vstack";
 import { ThreeDotsIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import React, { useState } from "react";
-import HeartButton from "../heartButton/HeartButton";
 import BookmarkButton from "../bookmarkButton/BookmarkButton";
 import { useRouter } from "expo-router";
 import { Pressable } from "@/components/ui/pressable";
 import { StyleSheet } from "react-native";
 
 interface FeedCardProps {
-  id: string;
+  reviewId: number;
+  eateryId: number;
   name: string;
-  numberlikes: number;
   image: string;
   avatar?: string;
   title: string;
-  isFavourite?: boolean; // New prop for initial favourite state
   isBookmarked?: boolean; // New prop for initial bookmark state
 }
 
 const FeedCard: React.FC<FeedCardProps> = ({
-  id,
+  reviewId,
+  eateryId,
   name,
   image,
   avatar,
-  numberlikes,
   title,
-  isFavourite = false, // Default false
   isBookmarked = false, // Default false
 }) => {
   const router = useRouter();
-  const [isFav, setIsFav] = useState(isFavourite);
   const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
-
-  const handleFavouritePress = () => {
-    setIsFav((prev) => !prev);
-    console.log("Favourite Pressed:", !isFav);
-  };
 
   const handleBookmarkPress = () => {
     setIsBookmarkedState((prev) => !prev);
@@ -53,7 +44,17 @@ const FeedCard: React.FC<FeedCardProps> = ({
   };
 
   const goReview = () => {
-    router.push(`/review/${id}`);
+    console.log("Review Pressed", reviewId);
+    router.push(`/review/${reviewId}`);
+  };
+
+  const goEatery = () => {
+    router.push(`/(storefront)/${eateryId}`);
+  };
+
+  const goProfile = () => {
+    // router.push(`/profile/${name}`);
+    console.log("Profile Pressed", name);
   };
 
   return (
@@ -66,12 +67,18 @@ const FeedCard: React.FC<FeedCardProps> = ({
             {avatar && <AvatarImage source={{ uri: avatar }} />}
           </Avatar>
           <VStack>
-          <Text size="md" bold={true} style={styles.restaurantName}>
-              Little Italian Cafe
-            </Text>
+
+            <Pressable onPress={goEatery}>
+              <Text size="md" bold={true} style={styles.restaurantName}>
+                Little Italian Cafe
+              </Text>
+            </Pressable>
+
+            <Pressable onPress={goProfile}>
             <Text size="md" className="text-gray-500">
               {name}
             </Text>
+            </Pressable>
           </VStack>
         </Box>
 
@@ -91,11 +98,6 @@ const FeedCard: React.FC<FeedCardProps> = ({
         </Pressable>
       </Box>
 
-      {/* Captions */}
-      <Text size="md" className="ml-2 mr-2">
-        {title}
-      </Text>
-
       {/* Like and Save Buttons */}
       <Box className="flex-row items-center justify-between w-full p-2 ">
         {/* Left Side: Like Button and Count */}
@@ -109,6 +111,9 @@ const FeedCard: React.FC<FeedCardProps> = ({
           <Text size="md" className="text-gray-500">
             {numberlikes}
           </Text> */}
+          <Text size="md" className="ml-2 mr-2">
+            {title}
+          </Text>
         </Box>
 
         {/* Right Side: Bookmark Button */}
@@ -127,6 +132,6 @@ export { FeedCard };
 
 const styles = StyleSheet.create({
   restaurantName: {
-    color: '#072755',
+    color: "#072755",
   },
 });
