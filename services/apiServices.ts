@@ -105,80 +105,47 @@ export const fetchEateries = async () => {
   return await response.json();
 };
 
-export const fetchEateryById = async (eatery_id) => {
-  const jwt = await AsyncStorage.getItem("jwt");
-  console.log("Connecting to DB..")
-  console.log("Fetching eatery by ID....")
-
-  const response = await fetch(`${BASE_URL}/eatery/get/${eatery_id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
-
-  if (!response.ok) {
-      throw new Error("Failed to fetch eateries");
-  }
-  return await response.json();
-};
-
-
-export const postSavedEatery = async (eateryId) => {
-  console.log("EateryID to be saved:", eateryId);
-  const jwt = await AsyncStorage.getItem("jwt");
-  if (!jwt) throw new Error("No JWT token found");
-
-  const response = await fetch(`${BASE_URL}/savelist/`, {
+export const createUser = async (payload: any) => {
+  // Make a POST request to create a user
+  const response = await fetch(`${BASE_URL}/user`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",  
-      Authorization: `Bearer ${jwt}`,
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ eatery_id: eateryId }), 
+    body: JSON.stringify(payload),
   });
-
   if (!response.ok) {
-    throw new Error(`Error posting eatery data: ${response.status}`);
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || `Error creating user: ${response.status}`
+    );
   }
-
-  return await response.json();
+  return response.json();
 };
 
-export const deleteSavedEatery = async (eateryId: number) => {
+export const getUserReviews = async (targetUserId: string) => {
   const jwt = await AsyncStorage.getItem("jwt");
   if (!jwt) throw new Error("No JWT token found");
-
-  const response = await fetch(`${BASE_URL}/savelist/${eateryId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
-
+  const response = await fetch(
+    `${BASE_URL}/reviewpreviews/userprofile/${targetUserId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt}`,
+      },
+    }
+  );
   if (!response.ok) {
-    throw new Error(`Error deleting saved eatery: ${response.status}`);
+    throw new Error(`Error fetching reviews: ${response.status}`);
   }
-
-  return await response.json();
+  return response.json();
 };
 
-export const fetchEateryFeed = async (eatery_id) => {
-  const jwt = await AsyncStorage.getItem("jwt");
-  console.log("Connecting to DB..")
-  console.log("Fetching eatery reviews....")
-
-  const response = await fetch(`${BASE_URL}/reviewpreviews/eatery/${eatery_id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
-
+export const getReview = async (reviewId: string) => {
+  const response = await fetch(`${BASE_URL}/reviews/get/${reviewId}`);
   if (!response.ok) {
-      throw new Error("Failed to fetch eateries");
+    throw new Error("Failed to fetch review");
   }
-  return await response.json();
-};
+  return response.json();
+}
