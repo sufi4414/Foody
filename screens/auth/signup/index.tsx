@@ -101,6 +101,7 @@ const SignUpWithLeftBackground = () => {
     console.log("session", session);
     console.log("error", error);
     if (error) {
+      console.log("Error signing up...")
       toast.show({
         placement: "bottom right",
         render: ({ id }) => (
@@ -110,6 +111,7 @@ const SignUpWithLeftBackground = () => {
         ),
       });
     } else {
+      console.log("Sign up successfull...")
       toast.show({
         placement: "bottom right",
         render: ({ id }) => (
@@ -118,6 +120,7 @@ const SignUpWithLeftBackground = () => {
           </Toast>
         ),
       });
+      console.log("Re-routing to onboarding page...")
       router.push("/onboarding/setup"); // ✅ Redirect user to set up
     }
   };

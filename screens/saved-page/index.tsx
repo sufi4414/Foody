@@ -6,7 +6,7 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import items from "@/data/items.json";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "@/components/ui/view";  
 import { Pressable, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import {
@@ -26,6 +26,10 @@ const SavedPageList = () => {
     const [isSortedHighToLow, setIsSortedHighToLow] = useState(true);
     const [isPressed, setIsPressed] = useState(false);
     const [isLPressed, setIsLPressed] = useState(false);
+
+    useEffect(()=>{
+
+    })
   
     // Function to toggle sorting order
     const toggleSortOrder = () => {
@@ -51,11 +55,6 @@ const SavedPageList = () => {
         setIsLPressed(true);
       }
       // console.log("isPressed", isPressed);
-    };
-
-    
-    type RootStackParamList = {
-      storefront: { item: { id: number; name: string; address: string; rating: number; } };
     };
     
     const router = useRouter();

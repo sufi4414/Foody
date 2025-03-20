@@ -10,11 +10,17 @@ import { TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { View} from "@/components/ui/view";
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
+import { usePostReview } from "@/hooks/usePostReview";
+import { BASE_URL } from "@/services/apiServices";
 
 const AddReview = () => {
+    const { postReview, loading, error, success } = usePostReview(BASE_URL);
     const [images, setImages] = useState<(string | null)[]>([null, null, null]); // Allow 3 images
-    const [rating, setRating] = useState(2.5); // State to track the slider value
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [eatery_id, setEateryid] = useState("");
+    const [rating, setRating] = useState(2.5); 
 
   const pickImage = async (index) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -29,14 +35,47 @@ const AddReview = () => {
         setImages(newImages);
       }
   };
+  const handleSubmit = async () => {
+    if (!title || !content) {
+      console.log("Error", "Please fill in all fields.");
+      return;
+    }
+
+    try {
+      await postReview({
+        title,
+        content,
+        rating,
+        eatery_id: Number(eatery_id),
+        // images: images.filter((img) => img !== null) as string[],
+      });
+
+      // Reset form after success
+      setTitle("");
+      setContent("");
+    //   setLocation("");
+      setRating(2.5);
+      setImages([null, null, null]);
+      console.log("Success", "Your review has been posted!");
+    } catch (err) {
+      console.error("Failed to post review:", err);
+    }
+  };
   return (
+
     <SafeAreaView style={styles.wrapper}>
     <View style={styles.container}>
     <VStack space="md">
     <VStack space="md">
+        <Text>Restaurant (eatery_id)</Text>
+        <Input style={styles.input}>
+            <InputField placeholder="Eatery id" value={eatery_id} onChangeText={setEateryid}></InputField>
+        </Input>
+    </VStack>
+    <VStack space="md">
         <Text>Recommend and new spot for others to find</Text>
         <Input style={styles.input}>
-            <InputField placeholder="Write a cool headline"></InputField>
+            <InputField placeholder="Write a cool headline" value={title} onChangeText={setTitle}></InputField>
         </Input>
     </VStack>
     <VStack space="md">
@@ -53,7 +92,7 @@ const AddReview = () => {
             ))}
          </HStack>
          <Input style={styles.input}>
-            <InputField placeholder="Write a caption to get your audience excited.."></InputField>
+            <InputField placeholder="Write a caption to get your audience excited.." value={content} onChangeText={setContent}></InputField>
         </Input>
     </VStack> 
     <VStack space="md">
@@ -83,7 +122,7 @@ const AddReview = () => {
     </VStack>  
     </View>
     <View style={styles.buttonWrapper}>
-            <Button size='lg' style={styles.buttonStyle}>
+            <Button size='lg' style={styles.buttonStyle} onPress={handleSubmit}>
                 <ButtonText style={styles.buttonText}>Post</ButtonText>
             </Button>
     </View>

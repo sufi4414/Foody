@@ -12,8 +12,9 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity, Image, View, Text } from "react-native";
-import { Session } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
+import { Session } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
+import { BASE_URL } from "@/services/apiServices";
 
 const MainContent = () => {
   const router = useRouter();
@@ -65,13 +66,14 @@ const MainContent = () => {
       id: uid,
       username: formData.username,
       fullname: formData.fullName,
-      avatar_url: formData.profilePicture, // Adjust if you need to upload and then use a URL instead
+      avatar_url: " ", // Adjust if you need to upload and then use a URL instead
       bio: formData.bio,
       onboarding: false, // Set to true or false depending on your onboarding flow
     };
   
     try {
-      const response = await fetch("http://10.0.2.2:8000/user", {
+      console.log("Posting data to local db...")
+      const response = await fetch(`${BASE_URL}/user/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
