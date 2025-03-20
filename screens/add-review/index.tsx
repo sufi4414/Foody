@@ -6,7 +6,7 @@ import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from "@/component
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { useState } from "react";
-import { TouchableOpacity, Image } from "react-native";
+import { TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { View} from "@/components/ui/view";
@@ -15,12 +15,12 @@ import { usePostReview } from "@/hooks/usePostReview";
 import { BASE_URL } from "@/services/apiServices";
 
 const AddReview = () => {
-    const { postReview, loading, error, success } = usePostReview(BASE_URL);
+    const { postReview, loading } = usePostReview();
     const [images, setImages] = useState<(string | null)[]>([null, null, null]); // Allow 3 images
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [eatery_id, setEateryid] = useState("");
-    const [rating, setRating] = useState(2.5); 
+    const [rating, setRating] = useState(4); 
 
   const pickImage = async (index) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -36,27 +36,31 @@ const AddReview = () => {
       }
   };
   const handleSubmit = async () => {
-    if (!title || !content) {
+    console.log("Post button clicked...")
+    if (!title || !content || !eatery_id || !rating) {
       console.log("Error", "Please fill in all fields.");
       return;
     }
-
-    try {
-      await postReview({
+    const reviewData = {
         title,
         content,
-        rating,
-        eatery_id: Number(eatery_id),
-        // images: images.filter((img) => img !== null) as string[],
-      });
+        rating: Math.round(Number(rating)),  // Ensure rating is an integer
+        eatery_id: Number(eatery_id), // Convert eatery_id to number
+        // images: formattedImages       // Include image URIs
+    };
 
-      // Reset form after success
-      setTitle("");
-      setContent("");
-    //   setLocation("");
-      setRating(2.5);
-      setImages([null, null, null]);
-      console.log("Success", "Your review has been posted!");
+    try {
+        console.log("Posting Review.. Please wait..");
+        await postReview(reviewData);
+
+        // Reset form after success
+        setTitle("");
+        setContent("");
+        setEateryid("");  // Reset eatery_id field
+        setRating(4);
+        setImages([null, null, null]);
+
+        console.log("Success", "Your review has been posted!");
     } catch (err) {
       console.error("Failed to post review:", err);
     }
@@ -104,10 +108,10 @@ const AddReview = () => {
     <VStack space="md">
          <Text>How would you rate this place? Add a score</Text>
          <Slider
-         defaultValue={2.5}
+         defaultValue={4}
          minValue={0}
-         maxValue={5.0}
-         step={0.1}
+         maxValue={5}
+         step={1}
          onChange={(value) => setRating(value)}
          >
             <SliderTrack style={styles.sliderTrack}>
@@ -116,15 +120,24 @@ const AddReview = () => {
             <SliderThumb style={styles.sliderTrack}/>
          </Slider>
          <View >
-            <Text style={{ fontSize: 14, fontWeight: "bold" }}>{rating.toFixed(1)}</Text>
+            <Text style={{ fontSize: 14, fontWeight: "bold" }}>{rating}</Text>
         </View> 
     </VStack>  
     </VStack>  
     </View>
     <View style={styles.buttonWrapper}>
-            <Button size='lg' style={styles.buttonStyle} onPress={handleSubmit}>
-                <ButtonText style={styles.buttonText}>Post</ButtonText>
-            </Button>
+    <Button 
+        size="lg" 
+        style={styles.buttonStyle} 
+        onPress={handleSubmit} 
+        disabled={loading} // ✅ Disable button while loading
+    >
+        {loading ? ( 
+            <ActivityIndicator size="small" color="#ffffff" /> // ✅ Show loading spinner
+        ) : ( 
+            <ButtonText style={styles.buttonText}>Post</ButtonText>
+        )}
+    </Button>
     </View>
     </SafeAreaView>
 

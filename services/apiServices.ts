@@ -68,18 +68,23 @@ export const getFollowings = async () => {
   return response.json();
 };
 
-export const postReview = async () => {
+export const postReview = async (reviewData) => {
+  console.log(reviewData)
   const jwt = await AsyncStorage.getItem("jwt");
   if (!jwt) throw new Error("No JWT token found");
-  const response = await fetch(`${BASE_URL}/reviews`, {
+  console.log("Connecting to db to post review...")
+  const response = await fetch(`${BASE_URL}/reviews/`, { 
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${jwt}`,
     },
+    body: JSON.stringify(reviewData),
   });
+
   if (!response.ok) {
     throw new Error(`Error posting review: ${response.status}`);
   }
-  return response.json();
+
+  return await response.json();
 };

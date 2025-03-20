@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { postReview as apiPostReview } from "@/services/apiServices"; 
 
 export interface Review {
   title: string;
@@ -7,7 +8,7 @@ export interface Review {
   eatery_id: number;
 }
 
-export const usePostReview = (BASE_URL: string) => {
+export const usePostReview = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [success, setSuccess] = useState(false);
@@ -17,28 +18,20 @@ export const usePostReview = (BASE_URL: string) => {
       setLoading(true);
       setError(null);
       setSuccess(false);
+      console.log("Posting review...");
 
-      const response = await fetch(`${BASE_URL}/reviews`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reviewData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error posting review: ${response.status}`);
-      }
+      const response = await apiPostReview(reviewData); // Use API service function
 
       setSuccess(true);
-      return await response.json(); // Return response data if needed
+      return response;
     } catch (err: any) {
+      console.error("Failed to post review:", err);
       setError(err);
-      throw err; // Rethrow so the component can handle it
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  return { postReview, loading, error, success };
+  return { postReview, loading};
 };
