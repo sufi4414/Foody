@@ -18,12 +18,13 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { sampleUser, FEED_DATA } from "@/schemas/schemas";
 import { useProfileData } from "@/hooks/useProfileData";
-import ProfileMenu from "@/components/custom/profileMenu/profileMenu";
+import ProfileMenu from "@/components/custom/profileMenu/ProfileMenu";
 import { Box } from "@/components/ui/box";
+import { useAuth } from "@/providers/AuthProviders";
 
 const MainContent = () => {
   const router = useRouter();
-
+  const { myId } = useAuth();
   const { profile, reviews, loading, error } = useProfileData();
 
   // While the profile is loading or if there's an error, render appropriate UI.
@@ -121,6 +122,8 @@ const MainContent = () => {
 
       {reviews.map((review) => (
         <FeedCard
+          myId={myId}
+          key={review.review_id}
           userId = {profile.id}
           reviewId={review.review_id}
           eateryId={review.eatery_id}

@@ -9,10 +9,11 @@ import { useRouter } from "expo-router";
 import { Pressable } from "react-native";
 import { Image } from "@/components/ui/image";
 import { Box } from "@/components/ui/box";
+import { useAuth } from "@/providers/AuthProviders";
 
 const MainContent = () => {
   const router = useRouter();
-
+  const { myId } = useAuth();
   const handleSearchPress = () => {
     router.push("/search/searchpage");
   };
@@ -43,7 +44,7 @@ const MainContent = () => {
         </Pressable>
       </VStack>
       <>
-        <HomeFeedFold />
+        <HomeFeedFold myId={myId} />
       </>
     </>
   );

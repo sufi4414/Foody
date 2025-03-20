@@ -16,7 +16,9 @@ import { useRouter } from "expo-router";
 import { Pressable } from "@/components/ui/pressable";
 import { StyleSheet } from "react-native";
 
+
 interface FeedCardProps {
+  myId: string | null;
   reviewId: number;
   eateryId: number;
   userId: string;
@@ -27,7 +29,9 @@ interface FeedCardProps {
   isBookmarked?: boolean; // New prop for initial bookmark state
 }
 
+
 const FeedCard: React.FC<FeedCardProps> = ({
+  myId,
   reviewId,
   eateryId,
   userId,
@@ -55,7 +59,9 @@ const FeedCard: React.FC<FeedCardProps> = ({
   };
 
   const goProfile = () => {
-    // router.push(`/profile/${userId}`);
+    if (userId === myId) router.push("/profile");
+    else
+    router.push(`/otherprofile/${userId}`);
     console.log("Profile Pressed", userId);
   };
 

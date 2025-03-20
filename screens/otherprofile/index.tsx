@@ -8,28 +8,27 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { Center } from "@/components/ui/center";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { EditIcon } from "@/components/ui/icon";
 import { FeedCard } from "@/components/custom/feedcard";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { ScrollView } from "@/components/ui/scroll-view";
-import { Ellipsis, NutOff } from "lucide-react-native";
 import { Divider } from "@/components/ui/divider";
-import React, { useState, useEffect } from "react";
+import React , {useState} from "react";
 import { useRouter } from "expo-router";
-import { sampleUser, FEED_DATA } from "@/schemas/schemas";
-import { useProfileData } from "@/hooks/useProfileData";
+import { useOtherProfileData } from "@/hooks/useOtherProfileData";
+import { useAuth } from "@/providers/AuthProviders";
+import { followUser } from "@/services/apiServices";
 
 interface OtherProfileProps {
-    profileId: string;
-  }
+  profileId: string;
+}
 
-
-  const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
+const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
   const router = useRouter();
 
-  const { profile, reviews, loading, error } = useProfileData();
+  const { myId } = useAuth();
 
-  // While the profile is loading or if there's an error, render appropriate UI.
+  const { profile, reviewPreviews, loading, error } = useOtherProfileData(profileId);
+
   if (loading) {
     return (
       <Center className="mt-14">
@@ -46,20 +45,20 @@ interface OtherProfileProps {
     );
   }
 
-
-  const follow = () => {
-    console.log("Followed");
-    console.log(profileId);
+  const follow = async () => {
+    try {
+      const result = await followUser(profileId);
+      console.log("User followed successfully:", result);
+    } catch (err) {
+      console.error("Failed to follow user:", err);
+    }
   };
 
   return (
-    <Center className=" md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4 mt-4">
+    <Center className="md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4">
       <VStack space="lg" className="items-center">
         <Avatar size="2xl" className="bg-primary-600">
-          <AvatarImage
-            alt="Profile Image"
-            source={{ uri: profile.avatar_url }}
-          />
+          <AvatarImage alt="Profile Image" source={{ uri: profile.avatar_url }} />
         </Avatar>
 
         <VStack className="gap-1 w-full items-center">
@@ -71,25 +70,6 @@ interface OtherProfileProps {
           </Text>
         </VStack>
 
-        <HStack className="items-center gap-1">
-          {[
-            { value: profile.following, label: "Following" },
-            { value: profile.followers, label: "Followers" },
-          ].map((data, i) => (
-            <React.Fragment key={i}>
-              <VStack className="py-3 px-4 items-center" space="xs">
-                <Text className="text-dark font-roboto font-semibold">
-                  {data.value}
-                </Text>
-                <Text className="text-dark text-xs font-roboto">
-                  {data.label}
-                </Text>
-              </VStack>
-              {i < 1 && <Divider orientation="vertical" className="h-10" />}
-            </React.Fragment>
-          ))}
-        </HStack>
-
         <HStack space="md">
           <Button
             variant="outline"
@@ -98,23 +78,22 @@ interface OtherProfileProps {
             className="gap-3 relative"
           >
             <ButtonText className="text-dark">Follow</ButtonText>
-            
           </Button>
-
         </HStack>
-        
       </VStack>
 
-      {reviews.map((review) => (
-          <FeedCard
-            key={review.review_id}
-            reviewId={review.review_id}
-            eateryId={review.eatery_id}
-            isBookmarked={review.is_liked}
-            name={review.username}
-            image={FEED_DATA[0].image} //fix this
-            avatar={profile.avatar_url}
-            title={review.review_title}
+      {reviewPreviews.map((review) => (
+        <FeedCard
+          myId={myId}
+          key={review.review_id}
+          userId={profile.id}
+          reviewId={review.review_id}
+          eateryId={review.eatery_id}
+          isBookmarked={review.is_liked}
+          name={review.username}
+          image={review.preview_img || "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=612x612&w=0&k=20&c=_zOuJu755g2eEUioiOUdz_mHKJQJn-tDgIAhQzyeKUQ="}
+          avatar={profile.avatar_url}
+          title={review.review_title}
         />
       ))}
     </Center>
@@ -125,7 +104,7 @@ export const OtherProfile = ({ profileId }: OtherProfileProps) => {
   return (
     <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <MainContent profileId={profileId}/>
+        <MainContent profileId={profileId} />
       </ScrollView>
     </SafeAreaView>
   );

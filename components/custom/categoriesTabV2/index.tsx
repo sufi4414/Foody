@@ -19,33 +19,27 @@ const tabsData = [
           "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "good food and great company",
-        isFavourite: true,
+        title: "Good food and great company",
         isBookmarked: true,
       },
       {
-        id: "2",
+        id: "3",
         name: "John",
         image:
           "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "good food and great company",
-        isFavourite: true,
+        title: "Good food and great company",
         isBookmarked: true,
       },
       {
-        id: "2",
+        id: "4",
         name: "John",
         image:
           "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "good food and great company",
-        isFavourite: true,
+        title: "Good food and great company",
         isBookmarked: true,
       },
     ],
@@ -54,15 +48,13 @@ const tabsData = [
     name: "Coffee",
     data: [
       {
-        id: "2",
+        id: "5",
         name: "Marc",
         image:
           "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "good coffee",
-        isFavourite: true,
+        title: "Good coffee",
         isBookmarked: true,
       },
     ],
@@ -71,15 +63,12 @@ const tabsData = [
     name: "Beach",
     data: [
       {
-        id: "2",
+        id: "6",
         name: "John",
         image:
           "https://www.netcostmarket.com/wp-content/uploads/2021/05/picnic-on-the-beach.jpg",
-        avatar:
-          "",
-        numberlikes: 3,
-        title: "good food and great company",
-        isFavourite: true,
+        avatar: "",
+        title: "Good food and great company",
         isBookmarked: true,
       },
     ],
@@ -88,15 +77,13 @@ const tabsData = [
     name: "Birthday",
     data: [
       {
-        id: "2",
+        id: "7",
         name: "Gab",
         image:
           "https://curlygirlkitchen.com/wp-content/uploads/2024/01/Rainbow-Cake-High-Altitude-Sprinkles-Lucky-Charms-St-Patricks-Day-007.jpg",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "nice bday food",
-        isFavourite: true,
+        title: "Nice bday food",
         isBookmarked: true,
       },
     ],
@@ -105,15 +92,13 @@ const tabsData = [
     name: "Movie Night",
     data: [
       {
-        id: "2",
+        id: "8",
         name: "John",
         image:
           "https://upload.wikimedia.org/wikipedia/commons/7/73/001_Tacos_de_carnitas%2C_carne_asada_y_al_pastor.jpg",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "vibes bro",
-        isFavourite: true,
+        title: "Vibes bro",
         isBookmarked: true,
       },
     ],
@@ -122,15 +107,13 @@ const tabsData = [
     name: "Chill",
     data: [
       {
-        id: "2",
+        id: "9",
         name: "John",
         image:
           "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2h8ZW58MHx8MHx8fDA%3D",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "good food and great company",
-        isFavourite: true,
+        title: "Good food and great company",
         isBookmarked: true,
       },
     ],
@@ -170,12 +153,12 @@ const tabs = [
   },
 ];
 
-const HomeFeedFold = () => {
+const HomeFeedFold = ({ myId }: { myId: string }) => {
   const [activeTab, setActiveTab] = React.useState(tabs[0]);
   return (
     <VStack>
       <CatTabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
-      <TabPanelData activeTab={activeTab}/>
+      <TabPanelData activeTab={activeTab} myId={myId}/>
     </VStack>
   );
 };
@@ -202,7 +185,7 @@ const CatTabs = ({ tabs, activeTab, setActiveTab }: any) => {
                   <Image
                     source={{ uri: tab.image }}
                     className="w-20 h-20 rounded-xl bg-gray-200"
-                    alt = "tab.title"
+                    alt="tab.title"
                   />
                   <Text
                     size="sm"
@@ -224,7 +207,7 @@ const CatTabs = ({ tabs, activeTab, setActiveTab }: any) => {
   );
 };
 
-const TabPanelData = ({ activeTab }: any) => {
+const TabPanelData = ({ activeTab, myId }: { activeTab: any; myId: string }) => {
   // Find the tab data that matches the active tab title (case-insensitive)
   const currentTabData = tabsData.find(
     (tabData) => tabData.name.toLowerCase() === activeTab.title.toLowerCase()
@@ -233,19 +216,22 @@ const TabPanelData = ({ activeTab }: any) => {
   return (
     <>
       {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-        
-          {currentTabData?.data.map((feedItem: any, index: number) => (
-            <FeedCard
-              eateryId={1}
-              reviewId={feedItem.id}
-              isBookmarked={feedItem.isBookmarked}
-              name={feedItem.name}
-              image={feedItem.image}
-              avatar={feedItem.avatar}
-              title={feedItem.title}
-            />
-          ))}
-        
+
+      {currentTabData?.data.map((feedItem: any, index: number) => (
+        <FeedCard
+        key = {index}
+          myId={myId}
+          userId="38ac9a92-6783-4b7b-bb68-d935d3ba1802"
+          eateryId={1}
+          reviewId={feedItem.id}
+          isBookmarked={feedItem.isBookmarked}
+          name={feedItem.name}
+          image={feedItem.image}
+          avatar={feedItem.avatar}
+          title={feedItem.title}
+        />
+      ))}
+
       {/* </ScrollView> */}
     </>
   );
