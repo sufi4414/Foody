@@ -1,18 +1,19 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
 import { Input, InputField } from "@/components/ui/input";
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from "@/components/ui/slider";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { View} from "@/components/ui/view";
 import { StyleSheet } from "react-native";
 import { usePostReview } from "@/hooks/usePostReview";
-import { BASE_URL } from "@/services/apiServices";
+import { Select, SelectContent, SelectIcon, SelectInput, SelectItem, SelectPortal, SelectTrigger } from "@/components/ui/select";
+import { fetchEateries } from "@/services/apiServices";
+import { ChevronDownIcon } from "lucide-react-native";
 
 const AddReview = () => {
     const { postReview, loading } = usePostReview();
@@ -21,6 +22,48 @@ const AddReview = () => {
     const [content, setContent] = useState("");
     const [eatery_id, setEateryid] = useState("");
     const [rating, setRating] = useState(4); 
+
+    const [eateries, setEateries] = useState<{ id: number; name: string }[]>([]);
+    const [selectedEatery, setSelectedEatery] = useState<{ id: number; name: string } | null>(null);
+    const [searchTerm, setSearchTerm] = useState(""); 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+    const [filteredEateries, setFilteredEateries] = useState<{ id: number; name: string }[]>([]);
+
+    useEffect(() => {
+        const loadEateries = async () => {
+            try {
+                const data = await fetchEateries(); 
+                // console.log(data)
+                setEateries(data);
+            } catch (error) {
+                console.error("Error fetching eateries:", error);
+            }
+        };
+        loadEateries();
+    }, []);
+
+    useEffect(() => {
+        if (searchTerm.trim() === "") {
+            setFilteredEateries(eateries);
+        } else {
+            const filtered = eateries.filter((e) =>
+                e.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredEateries(filtered);
+        }
+    }, [searchTerm, eateries]);
+
+    const handleSelectEatery = (value: string) => {
+        const eatery = eateries.find((e) => e.id === Number(value));
+        if (eatery) {
+            console.log("Setting Selected Eatery:", eatery.id);
+            setSelectedEatery(eatery);
+            setSearchTerm(eatery.name); 
+            setIsDropdownOpen(false); 
+        }else {
+            console.error("Eatery not found for ID:", value); 
+        }
+    };
 
   const pickImage = async (index) => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -37,7 +80,11 @@ const AddReview = () => {
   };
   const handleSubmit = async () => {
     console.log("Post button clicked...")
-    if (!title || !content || !eatery_id || !rating) {
+    console.log("Eatery id: ",selectedEatery?.id)
+    console.log("Title: ",title)
+    console.log("Content: ",content)
+    console.log("Rating: ",rating)
+    if (!title || !content || !selectedEatery?.id || !rating) {
       console.log("Error", "Please fill in all fields.");
       return;
     }
@@ -45,7 +92,7 @@ const AddReview = () => {
         title,
         content,
         rating: Math.round(Number(rating)),  // Ensure rating is an integer
-        eatery_id: Number(eatery_id), // Convert eatery_id to number
+        eatery_id: selectedEatery.id, // Convert eatery_id to number
         // images: formattedImages       // Include image URIs
     };
 
@@ -71,13 +118,37 @@ const AddReview = () => {
     <View style={styles.container}>
     <VStack space="md">
     <VStack space="md">
-        <Text>Restaurant (eatery_id)</Text>
-        <Input style={styles.input}>
-            <InputField placeholder="Eatery id" value={eatery_id} onChangeText={setEateryid}></InputField>
-        </Input>
+        <Text>Restaurant</Text>
+        <Input style={{ marginBottom: 5 }}>
+                <InputField
+                    placeholder="Search for a restaurant..."
+                    value={searchTerm}
+                    onChangeText={setSearchTerm}
+                    onFocus={() => setIsDropdownOpen(true)} 
+                />
+            </Input>
+            {isDropdownOpen && (
+                <Select onValueChange={handleSelectEatery}>
+                    <SelectTrigger>
+                        <SelectInput placeholder="Select a Restaurant" value={selectedEatery ? selectedEatery.name : ""} />
+                        <SelectIcon as={ChevronDownIcon} />
+                    </SelectTrigger>
+                    <SelectPortal>
+                        <SelectContent>
+                            {filteredEateries.length > 0 ? (
+                                filteredEateries.map((eatery) => (
+                                    <SelectItem key={eatery.id} label={eatery.name} value={String(eatery.id)} />
+                                ))
+                            ) : (
+                                <Text style={{ padding: 10 }}>No results found</Text>
+                            )}
+                        </SelectContent>
+                    </SelectPortal>
+                </Select>
+            )}
     </VStack>
     <VStack space="md">
-        <Text>Recommend and new spot for others to find</Text>
+        <Text>Add a Title</Text>
         <Input style={styles.input}>
             <InputField placeholder="Write a cool headline" value={title} onChangeText={setTitle}></InputField>
         </Input>
@@ -99,12 +170,12 @@ const AddReview = () => {
             <InputField placeholder="Write a caption to get your audience excited.." value={content} onChangeText={setContent}></InputField>
         </Input>
     </VStack> 
-    <VStack space="md">
+    {/* <VStack space="md">
          <Text>We need to know where this place is</Text>
          <Input style={styles.input}>
             <InputField placeholder="Location"></InputField>
         </Input>
-    </VStack> 
+    </VStack>  */}
     <VStack space="md">
          <Text>How would you rate this place? Add a score</Text>
          <Slider

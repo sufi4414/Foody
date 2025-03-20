@@ -88,3 +88,11 @@ export const postReview = async (reviewData) => {
 
   return await response.json();
 };
+
+export const fetchEateries = async () => {
+  const response = await fetch(`${BASE_URL}/eatery/all/`); 
+  if (!response.ok) {
+      throw new Error("Failed to fetch eateries");
+  }
+  return await response.json();
+};
