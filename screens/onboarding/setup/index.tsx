@@ -71,7 +71,8 @@ const MainContent = () => {
       fullname: formData.fullName,
       avatar_url: " ", // Adjust if you need to upload and then use a URL instead
       bio: formData.bio,
-      onboarding: false, // Set to true or false depending on your onboarding flow
+      onboarding: false,
+      // role : "admin" // remove
     };
   
     try {
