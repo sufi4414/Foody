@@ -61,13 +61,17 @@ const StorefrontPage = ({ eatery_id }) => {
   };
 
     return (
-    <SafeAreaView>
-        <View style={styles.container}>
+    <SafeAreaView >
+      <ScrollView 
+      stickyHeaderIndices={[2]}
+      >
+        {/* <View style={styles.container}> */}
             <Image className='w-full h-72' source={sampleImage} alt=''/> 
             <View style={styles.cardContainer}>
-                <RestaurantCard eatery_id={eatery.id} name={eatery.name} address={eatery.address} rating={eatery.avg_rating}/>
+                <RestaurantCard eatery_id={eatery.id} name={eatery.name} address={eatery.address} rating={eatery.avg_rating} saved={eatery.is_saved}/>
             </View>
             {/* Tab Buttons */}
+            <View>
             <View style={styles.tabs} >
                 <TouchableOpacity
                 style={[styles.tabButton, activeTab === 'reviews' && styles.activeTab]}
@@ -84,32 +88,48 @@ const StorefrontPage = ({ eatery_id }) => {
                 onPress={() => setActiveTab('reservation')}>
                 <Text style={[styles.tabText, activeTab === 'reservation' && styles.activeTabText]}>Reservation</Text>
                 </TouchableOpacity>
+            </View> 
             </View>
-            <View style={styles.tabContent}>{renderTabContent()}</View>
-        </View>
+            {renderTabContent()}
+        {/* </View> */}
+        </ScrollView> 
+        {/* <View style={styles.tabContent}>{renderTabContent()}</View>     */}
     </SafeAreaView>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         position: 'relative',
         alignItems: 'center',
-        
+        backgroundColor: '#FFD700',
+        borderWidth: 2,
+        borderColor: '#0000FF', // Blue border
+      },
+      image: {
+        width: '100%',
+        height: 500, // adjust as needed
       },
       cardContainer: {
-        position: 'absolute',
-        top: '70%', // Adjust this value as needed to control the overlap
-        left: 0,
-        right: 0,
-        marginHorizontal: 'auto', 
+        marginTop:-70, // overlap effect
+      },
+      cardWrapper: {
+        backgroundColor: 'white',
+        paddingHorizontal: 16,
+        paddingVertical: 5,
       },
       tabs: {
-        position: 'absolute',
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignSelf:'center',
-        top: '130%', // Adjust this value as needed to control the overlap
+        justifyContent: 'space-between',
+        paddingHorizontal: 42, 
+        width: '100%',
+        marginBottom: 16,
+        // position: 'absolute',
+        // flexDirection: 'row',
+        // justifyContent: 'space-around',
+        // alignSelf:'center',
+        // top: '120%', // Adjust this value as needed to control the overlap
       },
       tabButton: {
         paddingVertical: 10,
@@ -125,13 +145,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
       },
       tabContent: {
-        position: 'absolute',
+        position: 'relative',
         alignSelf:'center',
         top: '150%', // Adjust this value as needed to control the overlap
         color: 'black',
       },
       activeTabText: {
         color: 'black',  // Color when the tab is active
+      },
+      scrollContainer: {
+        paddingBottom: 0,
       },
 })
 
