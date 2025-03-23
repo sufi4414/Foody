@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text } from "@/components/ui/text";
-import { SafeAreaView, TouchableOpacity } from "react-native";
+import { ActivityIndicator, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import RestaurantCard from '@/components/RestaurantCard';
 import { View} from "@/components/ui/view";
 import { Image } from '@/components/ui/image';
@@ -8,21 +8,55 @@ import sampleImage from "@/screens/storefront/assets/storefront_img.jpg"
 import { StyleSheet } from "react-native"
 import { HStack } from '@/components/ui/hstack';
 import { Button, ButtonText } from '@/components/ui/button';
-const StorefrontPage = ({id,name,address,rating}) => {  
+import { fetchEateryById } from "@/services/apiServices";
+import EateryFeed from '@/screens/storefront/eateryReviews';
+
+const StorefrontPage = ({ eatery_id }) => {  
+  console.log("eatery id: ",eatery_id)
     // State to manage the active tab
   const [activeTab, setActiveTab] = useState('reviews'); // Default tab is 'reviews'
+  const [eatery, setEatery] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadEatery = async () => {
+      console.log("Loading eatery from store front page...")
+      try {
+        const data = await fetchEateryById(Number(eatery_id)); // Fetch from API
+        setEatery(data);
+        console.log(data)
+      } catch (error) {
+        console.error("Failed to fetch eatery:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (eatery_id) {
+      loadEatery();
+    }
+  }, [eatery_id]);
+  
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
+
+  if (!eatery) {
+    return <Text>Eatery not found</Text>;
+  }
 
   // Function to render the content based on the active tab
   const renderTabContent = () => {
     switch (activeTab) {
       case 'reviews':
-        return <Text style={styles.activeTabText}>Reviews for {name}</Text>;
+        // return <Text>Review for {eatery.name} </Text>;
+        return <EateryFeed eatery_id={eatery.id} />;
       case 'menu':
-        return <Text>Menu for {name}</Text>;
+        return <Text>Menu, to be released soon </Text>;
       case 'reservation':
-        return <Text>Reservation details for {name}</Text>;
+        return <Text>Reservation details, to be released soon</Text>;
       default:
-        return <Text>Reviews for {name}</Text>;
+        return <Text>Reviews </Text>;
     }
   };
 
@@ -31,7 +65,7 @@ const StorefrontPage = ({id,name,address,rating}) => {
         <View style={styles.container}>
             <Image className='w-full h-72' source={sampleImage} alt=''/> 
             <View style={styles.cardContainer}>
-                <RestaurantCard id={id} name={name} address={address} rating={rating}/>
+                <RestaurantCard eatery_id={eatery.id} name={eatery.name} address={eatery.address} rating={eatery.avg_rating}/>
             </View>
             {/* Tab Buttons */}
             <View style={styles.tabs} >
@@ -52,8 +86,6 @@ const StorefrontPage = ({id,name,address,rating}) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.tabContent}>{renderTabContent()}</View>
-
-
         </View>
     </SafeAreaView>
     )

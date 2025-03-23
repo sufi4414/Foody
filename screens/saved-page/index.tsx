@@ -107,9 +107,6 @@ const SavedPageList = () => {
             pathname: '/(storefront)/[id]', 
             params: { 
               id: item.id,
-              name: item.name,
-              address: item.address,
-              rating: item.rating
             } })}
           >
           <View>
@@ -126,7 +123,7 @@ const SavedPageList = () => {
                 variant="outline"
                 disabled={true} 
                 >
-                  <ButtonText style={styles.ratingText}>{item.rating}</ButtonText>
+                  <ButtonText style={styles.ratingText}>{item.avg_rating}</ButtonText>
                 </Button>
             </HStack>
           </View>

@@ -88,9 +88,66 @@ export const postReview = async (reviewData) => {
 
   return await response.json();
 };
-
 export const fetchEateries = async () => {
   const response = await fetch(`${BASE_URL}/eatery/all/`); 
+  if (!response.ok) {
+      throw new Error("Failed to fetch eateries");
+  }
+  return await response.json();
+};
+
+export const fetchEateryById = async (eatery_id) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  console.log("Connecting to DB..")
+  console.log("Fetching eatery by ID....")
+
+  const response = await fetch(`${BASE_URL}/eatery/get/${eatery_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+  if (!response.ok) {
+      throw new Error("Failed to fetch eateries");
+  }
+  return await response.json();
+};
+
+
+export const postSavedEatery = async (eateryId) => {
+  console.log("EateryID to be saved:", eateryId);
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+
+  const response = await fetch(`${BASE_URL}/savelist/${eateryId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error posting eatery data: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
+export const fetchEateryFeed = async (eatery_id) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  console.log("Connecting to DB..")
+  console.log("Fetching eatery reviews....")
+
+  const response = await fetch(`${BASE_URL}/reviewpreviews/eatery/${eatery_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
   if (!response.ok) {
       throw new Error("Failed to fetch eateries");
   }
