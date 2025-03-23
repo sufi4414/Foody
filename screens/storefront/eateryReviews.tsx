@@ -47,12 +47,13 @@ const loadMore = async () => {
 
   return (
     <ScrollView
-    //   onScroll={({ nativeEvent }) => {
-    //     const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
-    //     const isNearBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 100;
-    //     if (isNearBottom) loadMore();
-    //   }}
-    //   scrollEventThrottle={400}
+    contentContainerStyle={{ paddingBottom: 40 }}
+      // onScroll={({ nativeEvent }) => {
+      //   const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+      //   const isNearBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 100;
+      //   if (isNearBottom) loadMore();
+      // }}
+      // scrollEventThrottle={400}
     >
       {currentTabData?.data.map((feedItem, index) => (
         <FeedCard

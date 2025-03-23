@@ -121,15 +121,35 @@ export const postSavedEatery = async (eateryId) => {
   const jwt = await AsyncStorage.getItem("jwt");
   if (!jwt) throw new Error("No JWT token found");
 
-  const response = await fetch(`${BASE_URL}/savelist/${eateryId}`, {
+  const response = await fetch(`${BASE_URL}/savelist/`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",  
+      Authorization: `Bearer ${jwt}`,
+    },
+    body: JSON.stringify({ eatery_id: eateryId }), 
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error posting eatery data: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
+export const deleteSavedEatery = async (eateryId: number) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+
+  const response = await fetch(`${BASE_URL}/savelist/${eateryId}`, {
+    method: "DELETE",
     headers: {
       Authorization: `Bearer ${jwt}`,
     },
   });
 
   if (!response.ok) {
-    throw new Error(`Error posting eatery data: ${response.status}`);
+    throw new Error(`Error deleting saved eatery: ${response.status}`);
   }
 
   return await response.json();

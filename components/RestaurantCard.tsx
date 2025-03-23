@@ -10,29 +10,29 @@ import { Button } from "./ui/button";
 import RatingButton from "./custom/ratingButton/RatingButton";
 import { Bookmark } from "lucide-react-native";
 import { useState } from "react";
-import { postSavedEatery } from "@/services/apiServices";
+import { postSavedEatery, deleteSavedEatery } from "@/services/apiServices";
 
-const RestaurantCard = ({eatery_id,name,address,rating}) => {
-  const [isSaved, setIsSaved] = useState(false);
+const RestaurantCard = ({eatery_id,name,address,rating,saved}) => {
+  const [isSaved, setIsSaved] = useState(saved);
 
   const handleSave = async () => {
-    console.log("Saved button is pressed..")
-    console.log(eatery_id)
     if (!eatery_id) return;
-  
-    const payload = { eatery_id };
-
-    try {
-      setIsSaved(true); // Toggle visual state immediately
-      console.log("Saving eatery:", payload);
-  
-      await postSavedEatery(payload.eatery_id);
-  
-      console.log("Eatery saved successfully!");
-    } catch (error) {
-      console.error("Error saving eatery:", error);
-      setIsSaved(false); // Rollback on failure
+    
+  try {
+    if (isSaved) {
+      console.log("Unsaving eatery:", eatery_id);
+      await deleteSavedEatery(eatery_id);
+      setIsSaved(false);
+      console.log("Eatery unsaved!");
+    } else {
+      console.log("Saving eatery:", eatery_id);
+      await postSavedEatery(eatery_id);
+      setIsSaved(true);
+      console.log("Eatery saved!");
     }
+  } catch (error) {
+    console.error("Error toggling saved state:", error);
+  }
   };
   
   return (
@@ -59,7 +59,7 @@ const RestaurantCard = ({eatery_id,name,address,rating}) => {
       <TouchableOpacity onPress={handleSave}>
         <Bookmark
           size={23}
-          color={isSaved ? "#7C3AED" : "transparent"} // Purple if saved
+          // color={isSaved ? "#7C3AED" : "transparent"} // Purple if saved
           stroke={isSaved ? "#7C3AED" : "#6B7280"}    // Outline
         />
       </TouchableOpacity>
