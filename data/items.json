@@ -1,33 +1,74 @@
 [
-    {
+  {
       "id": 1,
-      "name": "Burnt Ends",
-      "address": "7 Dempsey Road, #01-04, Singapore 249671",
-      "rating": 4.8
-    },
-    {
+      "name": "Urban Bites",
+      "address": "789 Market St, San Francisco, CA",
+      "cardinal_direction": "No postal code given",
+      "avg_rating": 4.6,
+      "price_range": "$$",
+      "contact_number": "(415) 555-7890",
+      "opening_hours": "9:00 AM - 11:00 PM",
+      "created_at": "2025-03-19T06:19:47",
+      "updated_at": "2025-03-19T06:19:47"
+  },
+  {
       "id": 2,
-      "name": "Candlenut",
-      "address": "Block 17A Dempsey Road, Singapore 249676",
-      "rating": 4.5
-    },
-    {
+      "name": "Morning Brew Café",
+      "address": "102 Willow St, Austin, TX",
+      "cardinal_direction": "No postal code given",
+      "avg_rating": 4.3,
+      "price_range": "$",
+      "contact_number": "(512) 555-1020",
+      "opening_hours": "7:00 AM - 3:00 PM",
+      "created_at": "2025-03-19T06:41:30",
+      "updated_at": "2025-03-19T06:41:30"
+  },
+  {
       "id": 3,
-      "name": "Jaan by Kirk Westaway",
-      "address": "Swissôtel The Stamford, 2 Stamford Road, Level 70, Singapore 178882",
-      "rating": 4.7
-    },
-    {
+      "name": "Prime Steakhouse",
+      "address": "456 Luxury Blvd, New York, NY",
+      "cardinal_direction": "No postal code given",
+      "avg_rating": 4.9,
+      "price_range": "$$$$",
+      "contact_number": "(212) 555-7890",
+      "opening_hours": "5:00 PM - 11:00 PM",
+      "created_at": "2025-03-19T06:42:23",
+      "updated_at": "2025-03-19T06:42:23"
+  },
+  {
       "id": 4,
-      "name": "Hawker Chan",
-      "address": "78 Smith Street, Singapore 058972",
-      "rating": 4.2
-    },
-    {
+      "name": "Joe's Pizza",
+      "address": "789 Main St, Chicago, IL",
+      "cardinal_direction": "No postal code given",
+      "avg_rating": 4.2,
+      "price_range": "$",
+      "contact_number": "(312) 555-6543",
+      "opening_hours": "11:00 AM - 10:00 PM",
+      "created_at": "2025-03-19T06:42:35",
+      "updated_at": "2025-03-19T06:42:35"
+  },
+  {
       "id": 5,
-      "name": "Odette",
-      "address": "1 St. Andrew’s Road, #01-04, National Gallery Singapore, Singapore 178957",
-      "rating": 4.9
-    }
-  ]
-  
+      "name": "Tokyo Sushi Bar",
+      "address": "101 Sakura Lane, Los Angeles, CA",
+      "cardinal_direction": "No postal code given",
+      "avg_rating": 4.7,
+      "price_range": "$$$",
+      "contact_number": "(310) 555-8080",
+      "opening_hours": "12:00 PM - 10:30 PM",
+      "created_at": "2025-03-19T06:42:46",
+      "updated_at": "2025-03-19T06:42:46"
+  },
+  {
+      "id": 6,
+      "name": "Green Earth Vegan",
+      "address": "77 Plant-Based Ave, Portland, OR",
+      "cardinal_direction": "No postal code given",
+      "avg_rating": 4.8,
+      "price_range": "$$",
+      "contact_number": "(503) 555-1234",
+      "opening_hours": "10:00 AM - 9:00 PM",
+      "created_at": "2025-03-19T06:42:56",
+      "updated_at": "2025-03-19T06:42:56"
+  }
+]
