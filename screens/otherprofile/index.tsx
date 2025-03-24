@@ -12,11 +12,11 @@ import { FeedCard } from "@/components/custom/feedcard";
 import { SafeAreaView } from "@/components/ui/safe-area-view";
 import { ScrollView } from "@/components/ui/scroll-view";
 import { Divider } from "@/components/ui/divider";
-import React , {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useOtherProfileData } from "@/hooks/useOtherProfileData";
-import { useAuth } from "@/providers/AuthProviders";
 import { followUser } from "@/services/apiServices";
+import { supabase } from "@/lib/supabase";
 
 interface OtherProfileProps {
   profileId: string;
@@ -24,10 +24,22 @@ interface OtherProfileProps {
 
 const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
   const router = useRouter();
+  const [myId, setMyId] = useState("");
 
-  const { myId } = useAuth();
+  const { profile, reviewPreviews, loading, error } =
+    useOtherProfileData(profileId);
 
-  const { profile, reviewPreviews, loading, error } = useOtherProfileData(profileId);
+  useEffect(() => {
+    const fetchSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        setMyId(session.user.id);
+      }
+    };
+    fetchSession();
+  }, []);
 
   if (loading) {
     return (
@@ -58,7 +70,10 @@ const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
     <Center className="md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4">
       <VStack space="lg" className="items-center">
         <Avatar size="2xl" className="bg-primary-600">
-          <AvatarImage alt="Profile Image" source={{ uri: profile.avatar_url }} />
+          <AvatarImage
+            alt="Profile Image"
+            source={{ uri: profile.avatar_url }}
+          />
         </Avatar>
 
         <VStack className="gap-1 w-full items-center">
@@ -89,11 +104,15 @@ const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
           userId={profile.id}
           reviewId={review.review_id}
           eateryId={review.eatery_id}
-          isBookmarked={review.is_liked}
+          eateryName={review.eatery_name}
           name={review.username}
-          image={review.preview_img || "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=612x612&w=0&k=20&c=_zOuJu755g2eEUioiOUdz_mHKJQJn-tDgIAhQzyeKUQ="}
+          image={
+            review.preview_img ||
+            "https://media.istockphoto.com/id/1409329028/vector/no-picture-available-placeholder-thumbnail-icon-illustration-design.jpg?s=612x612&w=0&k=20&c=_zOuJu755g2eEUioiOUdz_mHKJQJn-tDgIAhQzyeKUQ="
+          }
           avatar={profile.avatar_url}
           title={review.review_title}
+          isBookmarked={false}
         />
       ))}
     </Center>

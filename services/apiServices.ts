@@ -107,7 +107,7 @@ export const fetchEateries = async () => {
 
 export const createUser = async (payload: any) => {
   // Make a POST request to create a user
-  const response = await fetch(`${BASE_URL}/user`, {
+  const response = await fetch(`${BASE_URL}/user/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -366,4 +366,52 @@ export const deleteUserDietary = async (dietaryId) => {
     console.error("Error deleting user dietary:", error);
     throw error;
   }
+};
+
+export const followUser = async (target_user_id: string) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+  const response = await fetch(`${BASE_URL}/user/follow/${target_user_id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to follow user");
+  }
+  return response.json();
+};
+
+export const getOtherUserProfile = async (target_user_id: string) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+  const response = await fetch(`${BASE_URL}/user/find/${target_user_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch user profile");
+  }
+  return response.json();
+};
+
+export const getOtherUserReviews = async (target_user_id: string) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+  const response = await fetch(`${BASE_URL}/reviewpreviews/userprofile/${target_user_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch review previews");
+  }
+  return response.json();
 };

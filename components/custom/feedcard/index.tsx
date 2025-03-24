@@ -22,6 +22,7 @@ interface FeedCardProps {
   reviewId: number;
   eateryId: number;
   userId: string;
+  eateryName: string;
   name: string;
   image: string;
   avatar?: string;
@@ -35,6 +36,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
   reviewId,
   eateryId,
   userId,
+  eateryName,
   name,
   image,
   avatar,
@@ -63,6 +65,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
     else
     router.push(`/otherprofile/${userId}`);
     console.log("Profile Pressed", userId);
+    console.log("My ID", myId);
   };
 
   return (
@@ -78,7 +81,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
 
             <Pressable onPress={goEatery}>
               <Text size="md" bold={true} style={styles.restaurantName}>
-                Little Italian Cafe
+                {eateryName}
               </Text>
             </Pressable>
 

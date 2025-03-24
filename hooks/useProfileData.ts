@@ -22,8 +22,6 @@ export interface ReviewPreview {
   username: string;
   preview_img: string | null;
   review_title: string;
-  number_of_likes: number;
-  is_liked: boolean;
 }
 
 export const useProfileData = () => {

@@ -5,35 +5,36 @@ import {FeedCard} from "@/components/custom/feedcard";
 import { Text } from "@/components/ui/text";
 
 type FeedItem = {
-    review_id: number;
-    eatery_name: string;
-    user_avatar: string;
-    username: string;
-    preview_img: string;
-    review_title: string;
-    number_of_likes: number;
-    is_liked: boolean;
-    // Add others as needed
-  };
+  review_id: number;
+  eatery_id: number;
+  eatery_name: string;
+  user_avatar: string;
+  username: string;
+  preview_img: string | null;
+  review_title: string;
+  number_of_likes: number;
+  is_liked: boolean;
+};
 
-const EateryFeed = ({ eatery_id }) => {
+type EateryFeedProps = {
+  eatery_id: number;
+  myId: string;
+};
+
+const EateryFeed = ({ eatery_id, my_id }: EateryFeedProps) => {
   const [currentTabData, setCurrentTabData] = useState<{ data: FeedItem[] }>({ data: [] });
-//   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
-//   const [hasMore, setHasMore] = useState(true);
   const LIMIT = 10;
 
-const loadMore = async () => {
+  const loadMore = async () => {
     if (loading) return;
     setLoading(true);
     try {
-      const newFeed = await fetchEateryFeed(eatery_id);
-      console.log(newFeed)
+      const newFeed: FeedItem[] = await fetchEateryFeed(eatery_id);
+      console.log(newFeed);
       setCurrentTabData((prev) => ({
         data: [...prev.data, ...newFeed],
       }));
-    //   setOffset((prev) => prev + LIMIT);
-    //   if (newFeed.length < LIMIT) setHasMore(false);
     } catch (err) {
       console.error("Failed to load feed:", err);
     } finally {
@@ -46,25 +47,19 @@ const loadMore = async () => {
   }, [eatery_id]);
 
   return (
-    <ScrollView
-    contentContainerStyle={{ paddingBottom: 40 }}
-      // onScroll={({ nativeEvent }) => {
-      //   const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
-      //   const isNearBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 100;
-      //   if (isNearBottom) loadMore();
-      // }}
-      // scrollEventThrottle={400}
-    >
-      {currentTabData?.data.map((feedItem, index) => (
+    <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+      {currentTabData.data.map((feedItem, index) => (
         <FeedCard
-          key={feedItem.review_id + "-" + index}
-          id={feedItem.review_id}
-          isFavourite={feedItem.is_liked}
-          isBookmarked={false} // optional: modify as needed
-          name={feedItem.eatery_name}
-          image={feedItem.preview_img}
+          key={index}
+          myId={my_id}
+          userId={"12c4a609-d3b7-4373-ae88-cf6a203d4d18"}
+          reviewId={feedItem.review_id}
+          eateryId={eatery_id}
+          isBookmarked={false} 
+          eateryName={feedItem.eatery_name}
+          name={feedItem.username}
+          image={"https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
           avatar={feedItem.user_avatar}
-          numberlikes={feedItem.number_of_likes}
           title={feedItem.review_title}
         />
       ))}

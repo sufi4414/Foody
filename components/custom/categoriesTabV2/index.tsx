@@ -225,6 +225,7 @@ const TabPanelData = ({ activeTab, myId }: { activeTab: any; myId: string }) => 
           eateryId={1}
           reviewId={feedItem.id}
           isBookmarked={feedItem.isBookmarked}
+          eateryName="Eatery Name"
           name={feedItem.name}
           image={feedItem.image}
           avatar={feedItem.avatar}
