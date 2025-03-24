@@ -1,7 +1,7 @@
 // services/apiService.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const BASE_URL = "http://192.168.1.223:8000";
+export const BASE_URL = "http://10.0.2.2:8000";
 
 const getHeaders = async () => {
   const jwt = await AsyncStorage.getItem("jwt");
@@ -226,4 +226,144 @@ export const fetchEateryFeed = async (eatery_id) => {
       throw new Error("Failed to fetch eateries");
   }
   return await response.json();
+};
+
+export const getAllPreferences = async () => {
+  const response = await fetch(`${BASE_URL}/preference/all`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch preferences");
+  }
+  return response.json();
+};
+export const getAllUserPreferences = async () => {
+  try {
+    const headers = await getHeaders();
+    const response = await fetch(`${BASE_URL}/preference/user/all`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to fetch user's preferences: ${response.status} - ${errorData.message || "Unknown error"}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching user preferences:", error);
+    throw error;
+  }
+};
+
+// Create a user preference
+export const createUserPreference = async (preferenceId) => {
+  try {
+    const headers = await getHeaders();
+    const response = await fetch(`${BASE_URL}/preference/user/`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ preference_id: preferenceId }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to create user preference: ${response.status} - ${errorData.message || "Unknown error"}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error creating user preference:", error);
+    throw error;
+  }
+};
+
+// Delete a user preference
+export const deleteUserPreference = async (preferenceId) => {
+  try {
+    const headers = await getHeaders();
+    const response = await fetch(`${BASE_URL}/preference/user/${preferenceId}`, {
+      method: "DELETE",
+      headers,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to delete user preference: ${response.status} - ${errorData.message || "Unknown error"}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error deleting user preference:", error);
+    throw error;
+  }
+};
+
+
+export const getAllDietary = async () => {
+  const response = await fetch(`${BASE_URL}/dietary/all`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch dietary restrictions");
+  }
+  return response.json();
+};
+
+export const getAllUserDietary = async () => {
+  try {
+    const headers = await getHeaders();
+    const response = await fetch(`${BASE_URL}/dietary/user/all`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to fetch user's dietary: ${response.status} - ${errorData.message || "Unknown error"}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching user dietary:", error);
+    throw error;
+  }
+};
+
+
+export const createUserDietary = async (dietaryId) => {
+  try {
+    const headers = await getHeaders();
+    const response = await fetch(`${BASE_URL}/dietary/user/`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ dietary_id: dietaryId }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to create user dietary: ${response.status} - ${errorData.message || "Unknown error"}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error creating user deitary:", error);
+    throw error;
+  }
+};
+
+
+export const deleteUserDietary = async (dietaryId) => {
+  try {
+    const headers = await getHeaders();
+    const response = await fetch(`${BASE_URL}/dietary/user/${dietaryId}`, {
+      method: "DELETE",
+      headers,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to delete user dietary: ${response.status} - ${errorData.message || "Unknown error"}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error deleting user dietary:", error);
+    throw error;
+  }
 };

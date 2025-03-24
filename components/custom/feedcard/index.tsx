@@ -18,8 +18,10 @@ import { StyleSheet } from "react-native";
 
 
 interface FeedCardProps {
+  myId: string | null;
   reviewId: number;
   eateryId: number;
+  userId: string;
   name: string;
   image: string;
   avatar?: string;
@@ -29,8 +31,10 @@ interface FeedCardProps {
 
 
 const FeedCard: React.FC<FeedCardProps> = ({
+  myId,
   reviewId,
   eateryId,
+  userId,
   name,
   image,
   avatar,
@@ -55,8 +59,10 @@ const FeedCard: React.FC<FeedCardProps> = ({
   };
 
   const goProfile = () => {
-    // router.push(`/profile/${name}`);
-    console.log("Profile Pressed", name);
+    if (userId === myId) router.push("/profile");
+    else
+    router.push(`/otherprofile/${userId}`);
+    console.log("Profile Pressed", userId);
   };
 
   return (

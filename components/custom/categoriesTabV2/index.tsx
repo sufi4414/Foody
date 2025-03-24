@@ -19,9 +19,7 @@ const tabsData = [
           "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         avatar:
           "https://gluestack.github.io/public-blog-video-assets/parrot.png",
-        numberlikes: 3,
-        title: "good food and great company",
-        isFavourite: true,
+        title: "Good food and great company",
         isBookmarked: true,
       },
       {
@@ -218,20 +216,22 @@ const TabPanelData = ({ activeTab, myId }: { activeTab: any; myId: string }) => 
   return (
     <>
       {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-        
-          {currentTabData?.data.map((feedItem: any, index: number) => (
-            <FeedCard
-              key={feedItem.id + index} // In case ids are not unique
-              eateryId={1}
-              reviewId={feedItem.id}
-              isBookmarked={feedItem.isBookmarked}
-              name={feedItem.name}
-              image={feedItem.image}
-              avatar={feedItem.avatar}
-              title={feedItem.title}
-            />
-          ))}
-        
+
+      {currentTabData?.data.map((feedItem: any, index: number) => (
+        <FeedCard
+        key = {index}
+          myId={myId}
+          userId="38ac9a92-6783-4b7b-bb68-d935d3ba1802"
+          eateryId={1}
+          reviewId={feedItem.id}
+          isBookmarked={feedItem.isBookmarked}
+          name={feedItem.name}
+          image={feedItem.image}
+          avatar={feedItem.avatar}
+          title={feedItem.title}
+        />
+      ))}
+
       {/* </ScrollView> */}
     </>
   );

@@ -118,7 +118,6 @@ const MainContent = () => {
             <ButtonIcon as={NutOff} />
           </Button>
         </HStack>
-        
       </VStack>
 
       {reviews.map((review) => (
