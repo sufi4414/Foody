@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toast, ToastTitle, useToast } from "@/components/ui/toast";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
@@ -23,7 +23,6 @@ import {
   EyeIcon,
   EyeOffIcon,
 } from "@/components/ui/icon";
-import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { Keyboard } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
@@ -32,26 +31,10 @@ import { AlertTriangle } from "lucide-react-native";
 import { GoogleIcon } from "./assets/icons/google";
 import { useRouter } from 'expo-router';
 import { AuthLayout } from "../layout";
-import { LinearGradient } from "expo-linear-gradient";
 import GradientButton from "@/components/custom/gradient-button/GradientButton";
 import { supabase } from "@/lib/supabase"; 
-import { SafeAreaView } from "react-native-safe-area-context";
-import FoodyIcon from "@/assets/Icons/Foody";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// const USERS = [
-//   {
-//     email: "sufi@gmail.com",
-//     password: "Sufi@123",
-//   },
-//   {
-//     email: "marc@gmail.com",
-//     password: "Marc@123",
-//   },
-//   {
-//     email: "gabriel@gmail.com",
-//     password: "Gabriel@1234",
-//   },
-// ];
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email(),
@@ -101,7 +84,6 @@ const onSubmit = async (data: LoginSchemaType) => {
     });
     return;
   }
-  // ✅ Success: Redirect to home page
   toast.show({
     placement: "bottom right",
     render: ({ id }) => (
@@ -110,6 +92,19 @@ const onSubmit = async (data: LoginSchemaType) => {
       </Toast>
     ),
   });
+
+    if (data.rememberme) {
+      try {
+        await AsyncStorage.setItem("credentials", JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }));
+      } catch (e) {
+        console.error("Failed to save credentials:", e);
+      }
+    } else {
+      await AsyncStorage.removeItem("credentials");
+    }
 
   router.push("/(tabs)"); // ✅ Navigate to the home screen after login
   reset();
@@ -128,6 +123,27 @@ const onSubmit = async (data: LoginSchemaType) => {
   };
   const secondInput = React.useRef<TextInput>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const loadSavedCredentials = async () => {
+      try {
+        const saved = await AsyncStorage.getItem("credentials");
+        if (saved) {
+          const { email, password } = JSON.parse(saved);
+          reset({
+            email,
+            password,
+            rememberme: true,
+          });
+        }
+      } catch (e) {
+        console.error("Failed to load saved credentials:", e);
+      }
+    };
+  
+    loadSavedCredentials();
+  }, []);
+  
   return (
     <VStack className="max-w-[440px]" space ='md'>
         <VStack space="md">
@@ -214,7 +230,7 @@ const onSubmit = async (data: LoginSchemaType) => {
               </FormControlErrorText>
             </FormControlError>
           </FormControl>
-          <HStack className="justify-between ">
+          <HStack className="justify-between" space="md">
             <Controller
               name="rememberme"
               defaultValue={false}
@@ -243,7 +259,7 @@ const onSubmit = async (data: LoginSchemaType) => {
         </VStack>
         <VStack space="md">
           <GradientButton title="Log in" onPress={handleSubmit(onSubmit)} />
-          <Button
+          {/* <Button
             variant="outline"
             action="secondary"
             className="w-full gap-1"
@@ -255,7 +271,7 @@ const onSubmit = async (data: LoginSchemaType) => {
               Continue with Google
             </ButtonText>
             <ButtonIcon as={GoogleIcon} />
-          </Button>
+          </Button> */}
         </VStack>
         <HStack className="self-center" space="sm">
           <Text size="md">Don't have an account?</Text>
