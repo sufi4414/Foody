@@ -204,7 +204,7 @@ const MainContent = () => {
 
 export const EditProfile = () => {
   return (
-    <SafeAreaView className="h-full w-full">
+    <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1">
         <MainContent />
       </ScrollView>

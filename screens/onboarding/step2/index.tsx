@@ -16,31 +16,55 @@ import {
 } from "@/components/ui/form-control";
 import { VStack } from "@/components/ui/vstack";
 import { CheckIcon } from "@/components/ui/icon";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
-
-const cuisineOptions = [
-  { label: "Italian", value: "italian" },
-  { label: "Chinese", value: "chinese" },
-  { label: "Japanese", value: "japanese" },
-  { label: "Indian", value: "indian" },
-  { label: "Mexican", value: "mexican" },
-  { label: "Thai", value: "thai" },
-  { label: "Mediterranean", value: "mediterranean" },
-  { label: "French", value: "french" },
-  { label: "Korean", value: "korean" },
-  { label: "Vietnamese", value: "vietnamese" },
-];
+import { usePreferences } from "@/hooks/usePreferences";
+import { createUserPreference, deleteUserPreference } from "@/services/apiServices";
 
 const MainContent = () => {
   const router = useRouter();
-  const [values, setValues] = useState([]);
+  const {
+    cuisineOptions,
+    userPreferenceIds,
+    selectedValues,
+    setSelectedValues,
+    loading,
+    error,
+  } = usePreferences();
 
-  const handleLogSelection = () => {
-    console.log("Selected Cuisines Preferences:", values);
-    router.push("/profile");
+  const handleLogSelection = async () => {
+    try {
+      // Map the current selections back to their IDs using cuisineOptions
+      const currentSelectedIds = cuisineOptions
+        .filter((option) => selectedValues.includes(option.value))
+        .map((option) => option.id);
+
+      // Determine added preferences (in current but not in initial)
+      const added = currentSelectedIds.filter(
+        (id) => !userPreferenceIds.includes(id)
+      );
+      // Determine removed preferences (in initial but not in current)
+      const removed = userPreferenceIds.filter(
+        (id) => !currentSelectedIds.includes(id)
+      );
+
+      // For each added preference, call the POST endpoint
+      for (const id of added) {
+        await createUserPreference(id);
+      }
+      // For each removed preference, call the DELETE endpoint
+      for (const id of removed) {
+        await deleteUserPreference(id);
+      }
+
+      console.log("Updated user preferences:", selectedValues);
+      router.push("/profile");
+    } catch (error) {
+      console.error("Error updating user preferences:", error);
+    }
   };
+// maybe add some handler for loading and error
 
   return (
     <VStack className="p-2" space="md">
@@ -53,12 +77,12 @@ const MainContent = () => {
 
         <CheckboxGroup
           className="my-2"
-          value={values}
-          onChange={(keys) => setValues(keys)}
+          value={selectedValues}
+          onChange={(keys) => setSelectedValues(keys)}
         >
           <VStack space="md">
             {cuisineOptions.map((option) => (
-              <Checkbox size="md" value={option.value} key={option.value}>
+              <Checkbox size="md" value={option.value} key={option.id}>
                 <CheckboxIndicator className="mr-2">
                   <CheckboxIcon as={CheckIcon} />
                 </CheckboxIndicator>
@@ -82,7 +106,7 @@ const MainContent = () => {
 
 export const Step2 = () => {
   return (
-    <SafeAreaView className="h-full w-full">
+    <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1">
         <MainContent />
       </ScrollView>

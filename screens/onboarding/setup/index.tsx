@@ -15,6 +15,7 @@ import { TouchableOpacity, Image, View, Text } from "react-native";
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { BASE_URL } from "@/services/apiServices";
+import { useCreateUser } from "@/hooks/useCreateUser";
 
 const MainContent = () => {
   const router = useRouter();
@@ -26,6 +27,8 @@ const MainContent = () => {
     bio: "",
     profilePicture: "",
   });
+
+  const { createUserHandler, loading, error } = useCreateUser();
 
   // Handle input changes
   const handleInputChange = (field: string, value: string) => {
@@ -68,28 +71,16 @@ const MainContent = () => {
       fullname: formData.fullName,
       avatar_url: " ", // Adjust if you need to upload and then use a URL instead
       bio: formData.bio,
-      onboarding: false, // Set to true or false depending on your onboarding flow
+      onboarding: false,
+      // role : "admin" // remove
     };
   
     try {
-      console.log("Posting data to local db...")
-      const response = await fetch(`${BASE_URL}/user/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error creating user:", errorData);
-        return;
-      }
-      const data = await response.json();
+      const data = await createUserHandler(payload);
       console.log("User created successfully:", data);
       router.push("/onboarding/step1"); // Navigate to the next screen
-    } catch (error) {
-      console.error("Error creating user:", error);
+    } catch (err) {
+      console.error("Error creating user:", err);
     }
   };
   
