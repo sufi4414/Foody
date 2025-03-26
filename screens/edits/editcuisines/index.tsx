@@ -59,7 +59,7 @@ const MainContent = () => {
       }
 
       console.log("Updated user cuisines:", selectedValues);
-      router.push("/onboarding/step3");
+      router.push("/edits/editprofile");
     } catch (error) {
       console.error("Error updating user preferences:", error);
     }
@@ -98,13 +98,13 @@ const MainContent = () => {
       </FormControl>
 
       <Button onPress={handleLogSelection}>
-        <ButtonText>Next</ButtonText>
+        <ButtonText>Done</ButtonText>
       </Button>
     </VStack>
   );
 };
 
-export const Step2 = () => {
+export const EditCuisines = () => {
   return (
     <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1">

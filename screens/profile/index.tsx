@@ -98,10 +98,10 @@ const MainContent = () => {
               <ButtonText className="text-dark">Edit Profile</ButtonText>
               <ButtonIcon as={EditIcon} />
             </Button>
-            <Button variant="outline" action="secondary" onPress={editDietary} className="gap-3 relative">
+            {/* <Button variant="outline" action="secondary" onPress={editDietary} className="gap-3 relative">
               <ButtonText className="text-dark">Edit Dietary</ButtonText>
               <ButtonIcon as={NutOff} />
-            </Button>
+            </Button> */}
           </HStack>
         </VStack>
 

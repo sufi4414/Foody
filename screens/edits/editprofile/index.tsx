@@ -10,12 +10,14 @@ import {
 import { Input, InputField } from "@/components/ui/input";
 import { VStack } from "@/components/ui/vstack";
 import React, { useState, useEffect } from "react";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import { sampleUser } from "@/schemas/schemas";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity, Image, View, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NutOff, Croissant , Pizza } from "lucide-react-native";
+import { BASE_URL } from "@/services/apiServices";
 
 const MainContent = () => {
   const router = useRouter();
@@ -59,7 +61,7 @@ const MainContent = () => {
           console.error("No JWT token found");
           return;
         }
-        const profileResponse = await fetch("http://10.0.2.2:8000/user/myprofile", {
+        const profileResponse = await fetch(`${BASE_URL}/user/myprofile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -125,6 +127,18 @@ const MainContent = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
     }
+  };
+
+  const editDietary = () => {
+    router.push("/edits/editdietary");
+  };
+
+  const editCuisines = () => {
+    router.push("/edits/editcuisines");
+  };
+
+  const editDish = () => {
+    router.push("/edits/editdish");
   };
 
   return (
@@ -193,6 +207,21 @@ const MainContent = () => {
           />
         </Input>
       </FormControl>
+
+      <Button variant="outline" action="secondary" onPress={editDietary} className="gap-3 relative">
+              <ButtonText className="text-dark">Edit Dietary</ButtonText>
+              <ButtonIcon as={NutOff} />
+      </Button>
+
+      <Button variant="outline" action="secondary" onPress={editCuisines} className="gap-3 relative">
+              <ButtonText className="text-dark">Edit Cuisines</ButtonText>
+              <ButtonIcon as={Croissant} />
+      </Button>
+
+      <Button variant="outline" action="secondary" onPress={editDish} className="gap-3 relative">
+              <ButtonText className="text-dark">Edit Dishes</ButtonText>
+              <ButtonIcon as={Pizza} />
+      </Button>
 
       {/* Save Changes Button */}
       <Button onPress={handleSaveChanges}>
