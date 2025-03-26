@@ -371,15 +371,32 @@ export const deleteUserDietary = async (dietaryId) => {
 export const followUser = async (target_user_id: string) => {
   const jwt = await AsyncStorage.getItem("jwt");
   if (!jwt) throw new Error("No JWT token found");
-  const response = await fetch(`${BASE_URL}/user/follow/${target_user_id}`, {
+  const response = await fetch(`${BASE_URL}/user/follow`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+      body: JSON.stringify({ following_id: target_user_id }),
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to follow user");
+  }
+  return response.json();
+};
+
+export const unfollowUser = async (target_user_id: string) => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+  const response = await fetch(`${BASE_URL}/user/follow/${target_user_id}`, {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${jwt}`,
     },
   });
   if (!response.ok) {
-    throw new Error("Failed to follow user");
+    throw new Error("Failed to unfollow user");
   }
   return response.json();
 };
