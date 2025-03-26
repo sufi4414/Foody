@@ -376,14 +376,15 @@ export const followUser = async (target_user_id: string) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${jwt}`,
-      body: JSON.stringify({ following_id: target_user_id }),
     },
+    body: JSON.stringify({ following_id: target_user_id }),
   });
   if (!response.ok) {
     throw new Error("Failed to follow user");
   }
   return response.json();
 };
+
 
 export const unfollowUser = async (target_user_id: string) => {
   const jwt = await AsyncStorage.getItem("jwt");
