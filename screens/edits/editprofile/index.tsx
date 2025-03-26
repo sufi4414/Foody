@@ -108,7 +108,7 @@ const MainContent = () => {
         // onboarding: false,
       };
 
-      const response = await fetch("http://10.0.2.2:8000/user/update", {
+      const response = await fetch(`${BASE_URL}/user/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
