@@ -16,95 +16,91 @@ import {
 } from "@/components/ui/form-control";
 import { VStack } from "@/components/ui/vstack";
 import { CheckIcon } from "@/components/ui/icon";
-import React, { useState, useEffect } from "react";
-import { Button, ButtonText } from "@/components/ui/button";
-import { useRouter } from "expo-router";
-import { useCuisinePreferences } from "@/hooks/useCuisinePreferences";
-import { createUserPreference, deleteUserPreference } from "@/services/apiServices";
+import React, { useState } from "react";
+import { Button, ButtonText } from "@/components/ui/button"; 
+import {useRouter} from 'expo-router';
+import { useDietary } from "@/hooks/useDietary";
+import { createUserDietary , deleteUserDietary } from "@/services/apiServices";
 
 const MainContent = () => {
   const router = useRouter();
   const {
-    cuisineOptions,
-    userPreferenceIds,
+    dietaryOptions,
+    userDietaryIds,
     selectedValues,
     setSelectedValues,
     loading,
     error,
-  } = useCuisinePreferences();
+  } = useDietary();
 
   const handleLogSelection = async () => {
+    // Map the selected dietary names back to their corresponding IDs
+    const currentSelectedIds = dietaryOptions
+      .filter((option) => selectedValues.includes(option.value))
+      .map((option) => option.id);
+
+    // Determine which dietary restrictions were added or removed
+    const added = currentSelectedIds.filter(
+      (id) => !userDietaryIds.includes(id)
+    );
+    const removed = userDietaryIds.filter(
+      (id) => !currentSelectedIds.includes(id)
+    );
+
     try {
-      // Map the current selections back to their IDs using cuisineOptions
-      const currentSelectedIds = cuisineOptions
-        .filter((option) => selectedValues.includes(option.value))
-        .map((option) => option.id);
-
-      // Determine added preferences (in current but not in initial)
-      const added = currentSelectedIds.filter(
-        (id) => !userPreferenceIds.includes(id)
-      );
-      // Determine removed preferences (in initial but not in current)
-      const removed = userPreferenceIds.filter(
-        (id) => !currentSelectedIds.includes(id)
-      );
-
-      // For each added preference, call the POST endpoint
+      // For each added dietary restriction, call the POST endpoint
       for (const id of added) {
-        await createUserPreference(id);
+        await createUserDietary(id);
       }
-      // For each removed preference, call the DELETE endpoint
+      // For each removed dietary restriction, call the DELETE endpoint
       for (const id of removed) {
-        await deleteUserPreference(id);
+        await deleteUserDietary(id);
       }
-
-      console.log("Updated user cuisines:", selectedValues);
-      router.push("/onboarding/step3");
-    } catch (error) {
-      console.error("Error updating user preferences:", error);
+      console.log("Updated dietary restrictions:", selectedValues);
+      router.push("/edits/editprofile");
+    } catch (err) {
+      console.error("Error updating dietary restrictions:", err);
     }
   };
-// maybe add some handler for loading and error
 
   return (
     <VStack className="p-2" space="md">
       <FormControl>
         <FormControlLabel>
           <FormControlLabelText className="text-lg">
-            What cuisines do you prefer?
+            Any dietary restrictions?
           </FormControlLabelText>
         </FormControlLabel>
-
         <CheckboxGroup
           className="my-2"
           value={selectedValues}
           onChange={(keys) => setSelectedValues(keys)}
         >
           <VStack space="md">
-            {cuisineOptions.map((option) => (
+            {dietaryOptions.map((option) => (
               <Checkbox size="md" value={option.value} key={option.id}>
                 <CheckboxIndicator className="mr-2">
                   <CheckboxIcon as={CheckIcon} />
                 </CheckboxIndicator>
-                <CheckboxLabel>{option.label}</CheckboxLabel>
+                <CheckboxLabel className="text-base">
+                  {option.label}
+                </CheckboxLabel>
               </Checkbox>
             ))}
           </VStack>
         </CheckboxGroup>
-
         <FormControlHelper>
           <FormControlHelperText>Select all that apply</FormControlHelperText>
         </FormControlHelper>
       </FormControl>
-
       <Button onPress={handleLogSelection}>
-        <ButtonText>Next</ButtonText>
+        <ButtonText>Done</ButtonText>
       </Button>
     </VStack>
   );
 };
 
-export const Step2 = () => {
+export const EditDietary = () => {
   return (
     <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1">

@@ -15,9 +15,8 @@ import { Divider } from "@/components/ui/divider";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useOtherProfileData } from "@/hooks/useOtherProfileData";
-import { followUser } from "@/services/apiServices";
+import { followUser, unfollowUser } from "@/services/apiServices";
 import { supabase } from "@/lib/supabase";
-
 interface OtherProfileProps {
   profileId: string;
 }
@@ -25,9 +24,9 @@ interface OtherProfileProps {
 const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
   const router = useRouter();
   const [myId, setMyId] = useState("");
+  const [isFollowed, setIsFollowed] = useState(false);
 
-  const { profile, reviewPreviews, loading, error } =
-    useOtherProfileData(profileId);
+  const { profile, reviewPreviews, loading, error } = useOtherProfileData(profileId);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -40,6 +39,13 @@ const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
     };
     fetchSession();
   }, []);
+
+  // When the profile loads, set the local follow state
+  useEffect(() => {
+    if (profile) {
+      setIsFollowed(profile.isFollowed);
+    }
+  }, [profile]);
 
   if (loading) {
     return (
@@ -57,12 +63,20 @@ const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
     );
   }
 
-  const follow = async () => {
+  // Toggle follow/unfollow based on the current state
+  const toggleFollow = async () => {
     try {
-      const result = await followUser(profileId);
-      console.log("User followed successfully:", result);
+      if (isFollowed) {
+        const result = await unfollowUser(profileId);
+        console.log("User unfollowed successfully:", result);
+        setIsFollowed(false);
+      } else {
+        const result = await followUser(profileId);
+        console.log("User followed successfully:", result);
+        setIsFollowed(true);
+      }
     } catch (err) {
-      console.error("Failed to follow user:", err);
+      console.error("Failed to toggle follow status:", err);
     }
   };
 
@@ -70,10 +84,7 @@ const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
     <Center className="md:mt-14 mt-6 w-full md:px-10 md:pt-6 pb-4">
       <VStack space="lg" className="items-center">
         <Avatar size="2xl" className="bg-primary-600">
-          <AvatarImage
-            alt="Profile Image"
-            source={{ uri: profile.avatar_url }}
-          />
+          <AvatarImage alt="Profile Image" source={{ uri: profile.avatar_url }} />
         </Avatar>
 
         <VStack className="gap-1 w-full items-center">
@@ -89,10 +100,12 @@ const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
           <Button
             variant="outline"
             action="secondary"
-            onPress={follow}
+            onPress={toggleFollow}
             className="gap-3 relative"
           >
-            <ButtonText className="text-dark">Follow</ButtonText>
+            <ButtonText className="text-dark">
+              {isFollowed ? "Following" : "Follow"}
+            </ButtonText>
           </Button>
         </HStack>
       </VStack>

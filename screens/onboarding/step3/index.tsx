@@ -19,24 +19,24 @@ import { CheckIcon } from "@/components/ui/icon";
 import React, { useState, useEffect } from "react";
 import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
-import { useCuisinePreferences } from "@/hooks/useCuisinePreferences";
+import { useDishPreferences } from "@/hooks/useDishPreferences";
 import { createUserPreference, deleteUserPreference } from "@/services/apiServices";
 
 const MainContent = () => {
   const router = useRouter();
   const {
-    cuisineOptions,
+    dishOptions,
     userPreferenceIds,
     selectedValues,
     setSelectedValues,
     loading,
     error,
-  } = useCuisinePreferences();
+  } = useDishPreferences();
 
   const handleLogSelection = async () => {
     try {
       // Map the current selections back to their IDs using cuisineOptions
-      const currentSelectedIds = cuisineOptions
+      const currentSelectedIds = dishOptions
         .filter((option) => selectedValues.includes(option.value))
         .map((option) => option.id);
 
@@ -58,8 +58,8 @@ const MainContent = () => {
         await deleteUserPreference(id);
       }
 
-      console.log("Updated user cuisines:", selectedValues);
-      router.push("/onboarding/step3");
+      console.log("Updated user dishes:", selectedValues);
+      router.push("/profile");
     } catch (error) {
       console.error("Error updating user preferences:", error);
     }
@@ -71,7 +71,7 @@ const MainContent = () => {
       <FormControl>
         <FormControlLabel>
           <FormControlLabelText className="text-lg">
-            What cuisines do you prefer?
+            Whats your favourite dish?
           </FormControlLabelText>
         </FormControlLabel>
 
@@ -81,7 +81,7 @@ const MainContent = () => {
           onChange={(keys) => setSelectedValues(keys)}
         >
           <VStack space="md">
-            {cuisineOptions.map((option) => (
+            {dishOptions.map((option) => (
               <Checkbox size="md" value={option.value} key={option.id}>
                 <CheckboxIndicator className="mr-2">
                   <CheckboxIcon as={CheckIcon} />
@@ -98,13 +98,13 @@ const MainContent = () => {
       </FormControl>
 
       <Button onPress={handleLogSelection}>
-        <ButtonText>Next</ButtonText>
+        <ButtonText>Done</ButtonText>
       </Button>
     </VStack>
   );
 };
 
-export const Step2 = () => {
+export const Step3 = () => {
   return (
     <SafeAreaView className="h-full w-full bg-white dark:bg-gray-900">
       <ScrollView className="flex-1">
