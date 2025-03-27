@@ -1,12 +1,14 @@
-import { Button, ButtonIcon } from "@/components/ui/button";
-import { Menu, MenuItem, MenuItemLabel } from "@/components/ui/menu";
-import { MenuIcon } from "@/components/ui/icon";
-import React from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
+import { Actionsheet, ActionsheetContent, ActionsheetItem, ActionsheetItemText, ActionsheetDragIndicator, ActionsheetDragIndicatorWrapper, ActionsheetBackdrop } from "@/components/ui/actionsheet";
+import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
+import { Settings } from "lucide-react-native";
+import React from "react";
 
 const ProfileMenu = (): JSX.Element => {
-  const router = useRouter();
+        const [showActionsheet, setShowActionsheet] = React.useState(false);
+        const handleClose = () => setShowActionsheet(false);
+        const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -28,31 +30,36 @@ const ProfileMenu = (): JSX.Element => {
       alert("Logout failed. Please try again.");
     }
   };
-
-  return (
-    <Menu
-      offset={5}
-      trigger={({ ...triggerProps }) => {
-        return (
-          <Button
-            {...triggerProps}
-            size="sm" 
-          >
-            <ButtonIcon as={MenuIcon} />
-          </Button>
-        );
-      }}
-    >
-      <MenuItem
-        key="Logout"
-        textValue="Logout"
-        className="p-2"
-        onPress={handleLogout}
-      >
-        <MenuItemLabel size="sm">Logout</MenuItemLabel>
-      </MenuItem>
-    </Menu>
-  );
-};
-
-export default ProfileMenu;
+          return (
+            <>
+              <Button variant="link" onPress={() => setShowActionsheet(true)}>
+                {/* <ButtonText>Open Actionsheet</ButtonText> */}
+                <ButtonIcon as={Settings} />
+              </Button>
+              <Actionsheet isOpen={showActionsheet} onClose={handleClose}>
+                <ActionsheetBackdrop />
+                <ActionsheetContent>
+                  <ActionsheetDragIndicatorWrapper>
+                    <ActionsheetDragIndicator />
+                  </ActionsheetDragIndicatorWrapper>
+                  <ActionsheetItem onPress={handleLogout}>
+                    <ActionsheetItemText>Logout</ActionsheetItemText>
+                  </ActionsheetItem>
+                  {/* <ActionsheetItem onPress={handleClose}>
+                    <ActionsheetItemText>Mark Unread</ActionsheetItemText>
+                  </ActionsheetItem>
+                  <ActionsheetItem onPress={handleClose}>
+                    <ActionsheetItemText>Remind Me</ActionsheetItemText>
+                  </ActionsheetItem>
+                  <ActionsheetItem onPress={handleClose}>
+                    <ActionsheetItemText>Add to Saved Items</ActionsheetItemText>
+                  </ActionsheetItem>
+                  <ActionsheetItem isDisabled onPress={handleClose}>
+                    <ActionsheetItemText>Delete</ActionsheetItemText>
+                  </ActionsheetItem> */}
+                </ActionsheetContent>
+              </Actionsheet>
+            </>
+          );
+        }
+        export default ProfileMenu;

@@ -19,6 +19,7 @@ import { useRouter } from "expo-router";
 import { useProfileData } from "@/hooks/useProfileData";
 import ProfileMenu from "@/components/custom/profileMenu/ProfileMenu";
 import { Box } from "@/components/ui/box";
+import { StyleSheet } from "react-native";
 
 const MainContent = () => {
   const router = useRouter();
@@ -94,7 +95,7 @@ const MainContent = () => {
             ))}
           </HStack>
           <HStack space="md">
-            <Button variant="outline" action="secondary" onPress={editProfile} className="gap-3 relative">
+            <Button style={styles.buttonStyle2} variant="outline" action="secondary" onPress={editProfile} className="gap-3 relative">
               <ButtonText className="text-dark">Edit Profile</ButtonText>
               <ButtonIcon as={EditIcon} />
             </Button>
@@ -134,3 +135,19 @@ export const Profile = () => {
     </SafeAreaView>
   );
 };
+
+
+const styles = StyleSheet.create({
+    buttonStyle2: {
+        borderRadius: 12,
+        // backgroundColor: "rgba(135, 82, 235, 0.22)", // Matching color
+    },
+    buttonStyle: {
+        borderRadius: 12,
+        backgroundColor: "rgba(135, 82, 235, 0.22)", // Matching color
+    },
+    buttonText: {
+        color: "#000", 
+    },
+
+  });

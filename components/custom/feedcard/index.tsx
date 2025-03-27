@@ -15,7 +15,7 @@ import BookmarkButton from "../bookmarkButton/BookmarkButton";
 import { useRouter } from "expo-router";
 import { Pressable } from "@/components/ui/pressable";
 import { StyleSheet } from "react-native";
-
+import FeedcardSetting from "../feedcardsetting/FeedcardSetting";
 
 interface FeedCardProps {
   myId: string | null;
@@ -29,7 +29,6 @@ interface FeedCardProps {
   title: string;
   isBookmarked?: boolean; // New prop for initial bookmark state
 }
-
 
 const FeedCard: React.FC<FeedCardProps> = ({
   myId,
@@ -62,8 +61,7 @@ const FeedCard: React.FC<FeedCardProps> = ({
 
   const goProfile = () => {
     if (userId === myId) router.push("/profile");
-    else
-    router.push(`/otherprofile/${userId}`);
+    else router.push(`/otherprofile/${userId}`);
     console.log("Profile Pressed", userId);
     console.log("My ID", myId);
   };
@@ -78,7 +76,6 @@ const FeedCard: React.FC<FeedCardProps> = ({
             {avatar && <AvatarImage source={{ uri: avatar }} />}
           </Avatar>
           <VStack>
-
             <Pressable onPress={goEatery}>
               <Text size="md" bold={true} style={styles.restaurantName}>
                 {eateryName}
@@ -86,16 +83,17 @@ const FeedCard: React.FC<FeedCardProps> = ({
             </Pressable>
 
             <Pressable onPress={goProfile}>
-            <Text size="md" className="text-gray-500">
-              {name}
-            </Text>
+              <Text size="md" className="text-gray-500">
+                {name}
+              </Text>
             </Pressable>
           </VStack>
         </Box>
 
-        <Button size="lg" className="rounded-full mr-2" variant="link">
+        {/* <Button size="lg" className="rounded-full mr-2" variant="link">
           <ButtonIcon as={ThreeDotsIcon} />
-        </Button>
+        </Button> */}
+        {myId === userId && <FeedcardSetting reviewId={reviewId} />}
       </Box>
 
       {/* Post Image */}

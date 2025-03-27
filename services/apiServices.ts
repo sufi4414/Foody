@@ -1,7 +1,8 @@
 // services/apiService.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const BASE_URL = "http://192.168.1.251:8000";
+// export const BASE_URL = "http://192.168.1.251:8000";
+export const BASE_URL = "http://10.0.2.2:8000";
 
 const getHeaders = async () => {
   const jwt = await AsyncStorage.getItem("jwt");
@@ -451,4 +452,24 @@ export const getSavedEateries = async () => {
   }
 
   return response.json();
+};
+
+export const deleteReview = async (reviewId) => {
+  try {
+    const headers = await getHeaders();
+    const response = await fetch(`${BASE_URL}/reviews/${reviewId}`, {
+      method: "DELETE",
+      headers,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to delete reivew: ${response.status} - ${errorData.message || "Unknown error"}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error :", error);
+    throw error;
+  }
 };
