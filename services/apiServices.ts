@@ -433,3 +433,22 @@ export const getOtherUserReviews = async (target_user_id: string) => {
   }
   return response.json();
 };
+
+export const getSavedEateries = async () => {
+  const jwt = await AsyncStorage.getItem("jwt");
+  if (!jwt) throw new Error("No JWT token found");
+
+  const response = await fetch(`${BASE_URL}/savelist/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch saved eateries");
+  }
+
+  return response.json();
+};

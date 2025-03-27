@@ -4,7 +4,7 @@ import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import items from "@/data/items.json";
+// import items from "@/data/items.json";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState } from "react";
 import { View } from "@/components/ui/view";  
@@ -12,24 +12,40 @@ import { Pressable, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import {
   Button,
   ButtonText,
-  ButtonSpinner,
   ButtonIcon,
-  ButtonGroup,
 } from "@/components/ui/button"
 import { ChevronDown, ListFilterPlus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { supabase } from '@/lib/supabase'
+import { getSavedEateries } from "@/services/apiServices";
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const SavedPageList = () => {
-    const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => b.rating - a.rating));
+    // const [sortedItems, setSortedItems] = useState([...items].sort((a, b) => b.rating - a.rating));
+    const [sortedItems, setSortedItems] = useState<any[]>([]);
     const [isSortedHighToLow, setIsSortedHighToLow] = useState(true);
     const [isPressed, setIsPressed] = useState(false);
     const [isLPressed, setIsLPressed] = useState(false);
 
-    useEffect(()=>{
-
-    })
+    useFocusEffect(
+      React.useCallback(() => {
+        const fetchSaved = async () => {
+          try {
+            const data = await getSavedEateries();
+            console.log(data)
+            const sorted = data.sort((a, b) => b.avg_rating - a.avg_rating);
+            setSortedItems(sorted);
+            // console.log(sortedItems.id)
+          } catch (e) {
+            console.error("Failed to fetch saved eateries:", e);
+          }
+        };
+    
+        fetchSaved();
+      }, [])
+    );
+    
   
     // Function to toggle sorting order
     const toggleSortOrder = () => {
@@ -42,7 +58,6 @@ const SavedPageList = () => {
       }else {
         setIsPressed(true);
       }
-      // console.log("isPressed", isPressed);
     };
     const toggleLocation = async () => {
       supabase.auth.signOut();
@@ -54,9 +69,7 @@ const SavedPageList = () => {
       }else {
         setIsLPressed(true);
       }
-      // console.log("isPressed", isPressed);
-    };
-    
+    };  
     const router = useRouter();
 
 
@@ -106,15 +119,15 @@ const SavedPageList = () => {
           onPress={() => router.push({ 
             pathname: '/(storefront)/[id]', 
             params: { 
-              id: item.id,
+              id: item.eatery_id,
             } })}
           >
           <View>
             <HStack className="items-center" space="md" style={styles.item}> 
               <Text className="text-base font-semibold tracking-wide">{index + 1}.</Text>
                 <VStack className="w-auto space-between" style={styles.itemContent}>
-                  <Text className="text-base font-semibold tracking-wide">{item.name}</Text>
-                  <Text className="text-xs font-extralight tracking-wide" style={styles.address}>{item.address}</Text>
+                  <Text className="text-base font-semibold tracking-wide">{item.eatery_name}</Text>
+                  <Text className="text-xs font-extralight tracking-wide" style={styles.address}>{item.eatery_address}</Text>
                 </VStack>
                 <Button 
                 style={styles.buttonRating} 
@@ -131,7 +144,7 @@ const SavedPageList = () => {
             
             
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.eatery_id.toString()}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
       />
     
