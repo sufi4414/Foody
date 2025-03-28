@@ -30,30 +30,31 @@ export const useProfileData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const profileData: ProfileData = await getProfile();
-        const followersData = await getFollowers();
-        const followingsData = await getFollowings();
-        profileData.followers = Array.isArray(followersData) ? followersData.length : 0;
-        profileData.following = Array.isArray(followingsData) ? followingsData.length : 0;
-        setProfile(profileData);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const profileData = await getProfile();
+      const followers = await getFollowers();
+      const following = await getFollowings();
+      profileData.followers = Array.isArray(followers) ? followers.length : 0;
+      profileData.following = Array.isArray(following) ? following.length : 0;
+      setProfile(profileData);
 
-        // Once profile is available, fetch reviews using the profile ID.
-        if (profileData.id) {
-          const reviewsData = await getUserReviews(profileData.id);
-          setReviews(reviewsData);
-        }
-      } catch (err: any) {
-        setError(err);
-      } finally {
-        setLoading(false);
+      if (profileData.id) {
+        const reviewsData = await getUserReviews(profileData.id);
+        setReviews(reviewsData);
       }
-    };
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Run once on mount
+  useEffect(() => {
     fetchData();
   }, []);
 
-  return { profile, reviews, loading, error };
+  return { profile, reviews, loading, error, refetch: fetchData };
 };
