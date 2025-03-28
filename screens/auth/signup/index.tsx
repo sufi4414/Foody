@@ -219,7 +219,7 @@ const SignUpWithLeftBackground = () => {
                     textContentType="oneTimeCode"
                  
                   />
-                  <InputSlot onPress={handleState} className="pr-3">
+                  <InputSlot onPress={handleState} className="px-3">
                     <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
                   </InputSlot>
                 </Input>
@@ -267,7 +267,7 @@ const SignUpWithLeftBackground = () => {
                     textContentType="oneTimeCode"
                   />
 
-                  <InputSlot onPress={handleConfirmPwState} className="pr-3">
+                  <InputSlot onPress={handleConfirmPwState} className="px-3">
                     <InputIcon
                       as={showConfirmPassword ? EyeIcon : EyeOffIcon}
                     />
@@ -283,43 +283,13 @@ const SignUpWithLeftBackground = () => {
             </FormControlError>
           </FormControl>
 
-          <Controller
-            name="rememberme"
-            defaultValue={false}
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Checkbox
-                size="sm"
-                value="Remember me"
-                isChecked={value}
-                onChange={onChange}
-                aria-label="Remember me"
-              >
-                <CheckboxIndicator>
-                  <CheckboxIcon as={CheckIcon} />
-                </CheckboxIndicator>
-                <CheckboxLabel>
-                  I accept the Terms of Use & Privacy Policy
-                </CheckboxLabel>
-              </Checkbox>
-            )}
-          />
+
         </VStack>
         {/* End of VStack 3 --> Form Controllers and accept policy */}
 
         <VStack space="md">
           <GradientButton title="Sign up" onPress={handleSubmit(onSubmit)} />
-          <Button
-            variant="outline"
-            action="secondary"
-            className="w-full gap-1"
-            onPress={() => {}}
-          >
-            <ButtonText className="font-medium">
-              Continue with Google
-            </ButtonText>
-            <ButtonIcon as={GoogleIcon} />
-          </Button>
+
         </VStack>
         {/* End of VStack  --> Buttons */}
         <HStack className="self-center" space="sm">

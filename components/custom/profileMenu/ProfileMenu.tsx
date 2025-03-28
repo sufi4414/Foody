@@ -48,6 +48,8 @@ const ProfileMenu = (): JSX.Element => {
       } else {
         console.log("Session after logout:", session);
       }
+      setShowAlertDialog(false);
+      setShowActionsheet(false);
       router.push("/signin");
       alert("You have been logged out successfully!");
     } catch (error) {
@@ -67,7 +69,12 @@ const ProfileMenu = (): JSX.Element => {
           <ActionsheetDragIndicatorWrapper>
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
-          <ActionsheetItem onPress={() => setShowAlertDialog(true)}>
+          <ActionsheetItem
+            onPress={() => {
+              setShowActionsheet(false);
+              setShowAlertDialog(true);
+            }}
+          >
             <ActionsheetItemText>Logout</ActionsheetItemText>
           </ActionsheetItem>
         </ActionsheetContent>

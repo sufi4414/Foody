@@ -84,7 +84,6 @@ const MainContent = () => {
     }
   };
   
-
   return (
     <VStack space="md" className="p-4">
       {/* Profile Picture Upload */}
