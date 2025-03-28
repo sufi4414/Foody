@@ -17,6 +17,8 @@ import { useRouter } from "expo-router";
 import { useOtherProfileData } from "@/hooks/useOtherProfileData";
 import { followUser, unfollowUser } from "@/services/apiServices";
 import { supabase } from "@/lib/supabase";
+import { StyleSheet } from "react-native";
+
 interface OtherProfileProps {
   profileId: string;
 }
@@ -102,6 +104,7 @@ const MainContent: React.FC<OtherProfileProps> = ({ profileId }) => {
             action="secondary"
             onPress={toggleFollow}
             className="gap-3 relative"
+            style={isFollowed ? styles.followingStyle : styles.notFollowingStyle}
           >
             <ButtonText className="text-dark">
               {isFollowed ? "Following" : "Follow"}
@@ -141,3 +144,19 @@ export const OtherProfile = ({ profileId }: OtherProfileProps) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  
+  followingStyle: {
+      borderRadius: 12,
+      backgroundColor: "rgba(135, 82, 235, 0.22)", // Matching color
+  },
+  notFollowingStyle: {
+    borderRadius: 12,
+    
+},
+  buttonText: {
+      color: "#000", 
+  },
+
+});

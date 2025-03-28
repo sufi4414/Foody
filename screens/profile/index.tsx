@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import {
   Avatar,
@@ -20,11 +20,18 @@ import { useProfileData } from "@/hooks/useProfileData";
 import ProfileMenu from "@/components/custom/profileMenu/ProfileMenu";
 import { Box } from "@/components/ui/box";
 import { StyleSheet } from "react-native";
+import { useFocusEffect } from "expo-router";
 
 const MainContent = () => {
   const router = useRouter();
-  const { profile, reviews, loading, error } = useProfileData();
+  const { profile, reviews, loading, error, refetch } = useProfileData();
   const [myId, setMyId] = useState<string>("");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+    }, []) // <-- empty deps prevents infinite re‑creation
+  );
 
   useEffect(() => {
     const fetchSession = async () => {

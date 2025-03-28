@@ -21,6 +21,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import {useRouter} from 'expo-router';
 import { useDietary } from "@/hooks/useDietary";
 import { createUserDietary , deleteUserDietary } from "@/services/apiServices";
+import { StyleSheet } from "react-native";
 
 const MainContent = () => {
   const router = useRouter();
@@ -93,8 +94,8 @@ const MainContent = () => {
           <FormControlHelperText>Select all that apply</FormControlHelperText>
         </FormControlHelper>
       </FormControl>
-      <Button onPress={handleLogSelection}>
-        <ButtonText>Done</ButtonText>
+      <Button style={styles.buttonStyle} onPress={handleLogSelection}>
+        <ButtonText style={styles.buttonText}>Done</ButtonText>
       </Button>
     </VStack>
   );
@@ -109,3 +110,16 @@ export const EditDietary = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+    borderRadius: 12,
+    backgroundColor: "rgba(135, 82, 235, 0.22)", // Matching color
+  },
+  buttonStyle2: {
+    borderRadius: 12,
+  },
+  buttonText: {
+    color: "#000",
+  },
+});

@@ -18,6 +18,7 @@ import { TouchableOpacity, Image, View, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NutOff, Croissant , Pizza } from "lucide-react-native";
 import { BASE_URL } from "@/services/apiServices";
+import { StyleSheet } from "react-native";
 
 const MainContent = () => {
   const router = useRouter();
@@ -208,24 +209,24 @@ const MainContent = () => {
         </Input>
       </FormControl>
 
-      <Button variant="outline" action="secondary" onPress={editDietary} className="gap-3 relative">
-              <ButtonText className="text-dark">Edit Dietary</ButtonText>
+      <Button style={styles.buttonStyle2} variant="outline" action="secondary" onPress={editDietary} className="gap-3 relative">
+              <ButtonText style={styles.buttonText}>Edit Dietary</ButtonText>
               <ButtonIcon as={NutOff} />
       </Button>
 
-      <Button variant="outline" action="secondary" onPress={editCuisines} className="gap-3 relative">
-              <ButtonText className="text-dark">Edit Cuisines</ButtonText>
+      <Button style={styles.buttonStyle2} variant="outline" action="secondary" onPress={editCuisines} className="gap-3 relative">
+              <ButtonText style={styles.buttonText}>Edit Cuisines</ButtonText>
               <ButtonIcon as={Croissant} />
       </Button>
 
-      <Button variant="outline" action="secondary" onPress={editDish} className="gap-3 relative">
-              <ButtonText className="text-dark">Edit Dishes</ButtonText>
+      <Button style={styles.buttonStyle2} variant="outline" action="secondary" onPress={editDish} className="gap-3 relative">
+              <ButtonText style={styles.buttonText}>Edit Dishes</ButtonText>
               <ButtonIcon as={Pizza} />
       </Button>
 
       {/* Save Changes Button */}
-      <Button onPress={handleSaveChanges}>
-        <ButtonText>Save Changes</ButtonText>
+      <Button onPress={handleSaveChanges} style={styles.buttonStyle}>
+        <ButtonText style={styles.buttonText}>Save Changes</ButtonText>
       </Button>
     </VStack>
   );
@@ -240,3 +241,16 @@ export const EditProfile = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+    borderRadius: 12,
+    backgroundColor: "rgba(135, 82, 235, 0.22)", // Matching color
+  },
+  buttonStyle2: {
+    borderRadius: 12,
+  },
+  buttonText: {
+    color: "#000",
+  },
+});
