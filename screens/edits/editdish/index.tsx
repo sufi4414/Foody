@@ -21,6 +21,7 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import { useDishPreferences } from "@/hooks/useDishPreferences";
 import { createUserPreference, deleteUserPreference } from "@/services/apiServices";
+import { StyleSheet } from "react-native";
 
 const MainContent = () => {
   const router = useRouter();
@@ -97,8 +98,8 @@ const MainContent = () => {
         </FormControlHelper>
       </FormControl>
 
-      <Button onPress={handleLogSelection}>
-        <ButtonText>Done</ButtonText>
+      <Button style={styles.buttonStyle} onPress={handleLogSelection}>
+        <ButtonText style={styles.buttonText}>Done</ButtonText>
       </Button>
     </VStack>
   );
@@ -113,3 +114,16 @@ export const EditDish = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+    borderRadius: 12,
+    backgroundColor: "rgba(135, 82, 235, 0.22)", // Matching color
+  },
+  buttonStyle2: {
+    borderRadius: 12,
+  },
+  buttonText: {
+    color: "#000",
+  },
+});

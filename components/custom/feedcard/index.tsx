@@ -126,12 +126,12 @@ const FeedCard: React.FC<FeedCardProps> = ({
         </Box>
 
         {/* Right Side: Bookmark Button */}
-        <BookmarkButton
+        {/* <BookmarkButton
           size="xl"
           className="mr-2"
           isBookmarked={isBookmarkedState}
           onPress={handleBookmarkPress}
-        />
+        /> */}
       </Box>
     </Card>
   );
